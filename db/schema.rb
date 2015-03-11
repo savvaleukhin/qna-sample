@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20150311125113) do
     t.integer  "question_id"
   end
 
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
+
   create_table "questions", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
