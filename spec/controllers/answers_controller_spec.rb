@@ -85,7 +85,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:answer)).to eq answer_for_question
       end
 
-      it 'changes asnwer attributes' do
+      it 'changes answer attributes' do
         patch :update, question_id: question, id: answer_for_question, answer: { body: "New body of answer" }
         answer_for_question.reload
         expect(answer_for_question.body).to eq "New body of answer"
