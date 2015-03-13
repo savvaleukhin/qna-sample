@@ -1,8 +1,8 @@
 class AnswersController < ApplicationController
-  before_action :load_question, only: :index
   before_action :load_answer, only: [:show, :edit, :update, :destroy]
 
   def index
+    @question = Question.find(params[:question_id])
     @answers = @question.answers
   end
 
@@ -40,10 +40,6 @@ class AnswersController < ApplicationController
   end
 
   private
-
-  def load_question 
-    @question = Question.find(params[:question_id])
-  end
 
   def load_answer
     @answer = Answer.find_by(question_id: params[:question_id], id: params[:id])
