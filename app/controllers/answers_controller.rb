@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   before_action :load_answer, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
 
   def index
     @question = Question.find(params[:question_id])
@@ -10,6 +11,7 @@ class AnswersController < ApplicationController
   end
 
   def new
+    @question = Question.find(params[:question_id])
     @answer = Answer.new
   end
 
@@ -20,7 +22,7 @@ class AnswersController < ApplicationController
     @answer = Answer.new(answer_params.merge({question_id: params[:question_id]}))
 
     if @answer.save
-      redirect_to question_answer_path(params[:question_id], @answer)
+      redirect_to question_answer_path(params[:question_id], @answer), notice: 'Your answer successfully created.'
     else
       render :new
     end
