@@ -3,3 +3,5 @@ p= @question.body
 
 - @question.answers.each do |answer|
   p= answer.body
+
+p= link_to 'Post your answer', new_question_answer_path(@question)

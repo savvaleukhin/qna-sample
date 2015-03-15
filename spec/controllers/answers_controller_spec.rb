@@ -31,6 +31,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
+    sign_in_user
     before { get :new, question_id: question, id: answer_for_question }
 
     it 'assigns a new answer to @answer' do
@@ -43,6 +44,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
+    sign_in_user
     before { get :edit, question_id: question, id: answer_for_question }
 
     it 'assigns the requested answer to @answer' do
@@ -55,6 +57,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    sign_in_user
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
         expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(Answer, :count).by(1)
@@ -79,6 +82,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    sign_in_user
     context 'valid attributes' do
       it 'assigns the requested answer to @answer' do
         patch :update, question_id: question, id: answer_for_question, answer: attributes_for(:answer)
@@ -112,6 +116,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    sign_in_user
     before { answer_for_question }
 
     it 'deletes answer' do
