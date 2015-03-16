@@ -6,6 +6,10 @@ FactoryGirl.define do
     factory :question_2 do
       title "Second question"
     end  
+
+    factory :question_user do
+      user
+    end
   end
 
   factory :invalid_question, class: "Question" do
@@ -24,5 +28,5 @@ FactoryGirl.define do
     after(:create) do |question, evaluator|
       create_list(:answer_list, evaluator.answers_count, question: question)
     end      
-  end    
+  end 
 end
