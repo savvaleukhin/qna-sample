@@ -15,7 +15,7 @@ feature 'Create question', %q{
     click_on 'Ask question'    
     fill_in 'Title', with: 'Test question'
     fill_in 'Body', with: 'test text'
-    click_on 'Create'
+    click_on 'Save'
 
     expect(page).to have_content 'Your question successfully created.'
   end
