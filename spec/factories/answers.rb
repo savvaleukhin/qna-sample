@@ -10,6 +10,11 @@ FactoryGirl.define do
   factory :answer_list, class: "Answer" do
     body
     question
+
+    factory :answer_with_user do
+      body "User's answer"
+      user
+    end
   end
 
   factory :invalid_answer, class: "Answer" do

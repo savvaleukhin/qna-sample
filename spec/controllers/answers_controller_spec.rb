@@ -44,11 +44,11 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
-    sign_in_user
-    before { get :edit, question_id: question, id: answer_for_question }
+    sign_in_user_with_answer
+    before { get :edit, question_id: @answer.question, id: @answer }
 
     it 'assigns the requested answer to @answer' do
-      expect(assigns(:answer)).to eq answer_for_question
+      expect(assigns(:answer)).to eq @answer
     end
 
     it 'renders edit view' do
@@ -82,31 +82,31 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
+    sign_in_user_with_answer
     context 'valid attributes' do
       it 'assigns the requested answer to @answer' do
-        patch :update, question_id: question, id: answer_for_question, answer: attributes_for(:answer)
-        expect(assigns(:answer)).to eq answer_for_question
+        patch :update, question_id: @answer.question, id: @answer, answer: attributes_for(:answer)
+        expect(assigns(:answer)).to eq @answer
       end
 
       it 'changes answer attributes' do
-        patch :update, question_id: question, id: answer_for_question, answer: { body: "New body of answer" }
-        answer_for_question.reload
-        expect(answer_for_question.body).to eq "New body of answer"
+        patch :update, question_id: @answer.question, id: @answer, answer: { body: "New body of answer" }
+        @answer.reload
+        expect(@answer.body).to eq "New body of answer"
       end
 
       it 'redirects to the updated answer' do
-        patch :update, question_id: question, id: answer_for_question, answer: attributes_for(:answer)
+        patch :update, question_id: @answer.question, id: @answer, answer: attributes_for(:answer)
         expect(response).to redirect_to [:question, :answer]
       end
     end
 
     context 'invalid attributes' do
-      before { patch :update, question_id: question, id: answer_for_question, answer: { body: nil } }
+      before { patch :update, question_id: @answer.question, id: @answer, answer: { body: nil } }
 
       it 'does not change answer attributes' do
-        answer_for_question.reload
-        expect(answer_for_question.body).to eq "MyText"
+        @answer.reload
+        expect(@answer.body).to eq "User's answer"
       end
 
       it 're-renders edit view' do
@@ -116,15 +116,14 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
-    before { answer_for_question }
+    sign_in_user_with_answer
 
     it 'deletes answer' do
-      expect { delete :destroy, question_id: question, id: answer_for_question }.to change(Answer, :count).by(-1)
+      expect { delete :destroy, question_id: @answer.question, id: @answer }.to change(Answer, :count).by(-1)
     end
 
     it 'redirects to index view' do
-      delete :destroy, question_id: question, id: answer_for_question
+      delete :destroy, question_id: @answer.question, id: @answer
       expect(response).to redirect_to question_answers_path
     end
   end

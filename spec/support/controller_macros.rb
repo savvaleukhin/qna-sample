@@ -16,4 +16,14 @@ module ControllerMacros
       sign_in @user
     end
   end
+
+  def sign_in_user_with_answer
+    before do
+      @answer = create(:answer_with_user)
+
+      @user = @answer.user
+      @request.env['devise.mapping'] = Devise.mappings[:user]
+      sign_in @user
+    end
+  end
 end
