@@ -6,6 +6,10 @@ FactoryGirl.define do
     factory :question_2 do
       title "Second question"
     end
+
+    factory :question_user do
+      user
+    end
   end
 
   factory :invalid_question, class: "Question" do
