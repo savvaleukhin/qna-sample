@@ -7,7 +7,7 @@ FactoryGirl.define do
       title "Second question"
     end
 
-    factory :question_user do
+    factory :question_with_user do
       user
     end
   end
