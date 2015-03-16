@@ -1,0 +1,6 @@
+p= link_to 'Ask question', new_question_path
+- if @questions.any?
+  ul
+    - @questions.each do |q|
+      li
+        = q.title
