@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   before_action :load_answer, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
     @question = Question.find(params[:question_id])
@@ -16,6 +17,7 @@ class AnswersController < ApplicationController
   end
 
   def edit
+    @question = Question.find(params[:question_id])
   end
 
   def create
@@ -49,5 +51,11 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
+  end
+
+  def correct_user
+    unless @answer.user == current_user
+      redirect_to root_path, notice: 'You do not have permission to view this page.'
+    end
   end
 end
