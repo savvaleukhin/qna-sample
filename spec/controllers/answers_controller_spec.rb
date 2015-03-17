@@ -66,6 +66,10 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(Answer, :count).by(1)
       end
 
+      it 'associates the new answer with the question' do
+        expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(question.answers, :count).by(1)
+      end      
+
       it 'rederects to show view' do
         post :create, question_id: question, answer: attributes_for(:answer)
         expect(response).to redirect_to question_answer_path(question, assigns(:answer))
