@@ -19,7 +19,6 @@ feature 'Create question', %q{
 
     expect(page).to have_content 'Your question successfully created.'
     expect(page).to have_content 'My new question'
-    expect(current_path).to eq question_path(Question.last)
   end
 
   scenario 'Non-authenticated user tries to create a question' do
