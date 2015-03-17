@@ -7,7 +7,7 @@ FactoryGirl.define do
     body "MyText"
   end
 
-  factory :answer_list, class: "Answer" do
+  factory :answer_with_question, class: "Answer" do
     body
     question
 

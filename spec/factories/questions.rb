@@ -1,10 +1,14 @@
 FactoryGirl.define do
+  sequence :title do |n|
+    "Question \##{n}"
+  end
+
   factory :question do
     title "MyString"
     body "MyText"
 
-    factory :question_2 do
-      title "Second question"
+    factory :question_list do
+      title
     end
 
     factory :question_with_user do
@@ -26,7 +30,7 @@ FactoryGirl.define do
     end
 
     after(:create) do |question, evaluator|
-      create_list(:answer_list, evaluator.answers_count, question: question)
+      create_list(:answer_with_question, evaluator.answers_count, question: question)
     end
   end
 end
