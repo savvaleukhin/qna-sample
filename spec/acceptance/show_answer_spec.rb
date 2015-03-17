@@ -5,11 +5,11 @@ feature 'Show an answer', %q{
 }do
 
   given(:question) { create(:question) }
-  given(:answer) { create(:answer_with_question, question: question) }
+  given(:answer) { create(:answer, question: question, body: 'Answer for show test') }
 
   scenario 'User sees a posted answer' do
     visit question_answer_path(answer.question, answer)
 
-    expect(page).to have_content Answer.last.body
+    expect(page).to have_content 'Answer for show test'
   end
 end

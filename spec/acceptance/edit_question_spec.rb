@@ -11,6 +11,7 @@ feature 'Edit question', %q{
     visit edit_question_path(question_with_user)
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(current_path).to eq new_user_session_path
   end
 
   scenario 'Authenticated user (not the owner) tries to edit a question' do
