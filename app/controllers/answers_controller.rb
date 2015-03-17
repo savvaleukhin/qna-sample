@@ -1,10 +1,10 @@
 class AnswersController < ApplicationController
-  before_action :load_answer, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :load_question, only: [:index, :new, :edit]
+  before_action :load_answer, only: [:show, :edit, :update, :destroy]
   before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
-    @question = Question.find(params[:question_id])
     @answers = @question.answers
   end
 
@@ -12,12 +12,10 @@ class AnswersController < ApplicationController
   end
 
   def new
-    @question = Question.find(params[:question_id])
     @answer = Answer.new
   end
 
   def edit
-    @question = Question.find(params[:question_id])
   end
 
   def create
@@ -45,8 +43,12 @@ class AnswersController < ApplicationController
 
   private
 
+  def load_question
+    @question = Question.find(params[:question_id])
+  end
+
   def load_answer
-    @answer = Answer.find_by(question_id: params[:question_id], id: params[:id])
+    @answer = Answer.find_by!(question_id: params[:question_id], id: params[:id])
   end  
 
   def answer_params

@@ -57,7 +57,7 @@ feature 'Guest sign up', %q{
     expect(current_path).to eq root_path
   end
 
-  scenario 'Guest try to sign up with write details' do
+  scenario 'Guest try to sign up with wrong details' do
     visit new_user_registration_path
     fill_in 'Email', with: 'user@test.com'
     fill_in 'Password', with: nil
