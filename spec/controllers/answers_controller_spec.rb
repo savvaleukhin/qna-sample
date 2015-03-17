@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
   let(:answer_for_question) { create(:answer, question: question) }
+  let(:answer_with_user) { create(:answer_with_user) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     let(:answers) { create_list(:answer, 2, question: question) }
@@ -31,7 +33,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
-    sign_in_user
+    before { sign_in_user_x(user) }
     before { get :new, question_id: question, id: answer_for_question }
 
     it 'assigns a new answer to @answer' do
@@ -44,11 +46,11 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
-    sign_in_user_with_answer
-    before { get :edit, question_id: @answer.question, id: @answer }
+    before { sign_in_user_x(answer_with_user.user) }
+    before { get :edit, question_id: answer_with_user.question, id: answer_with_user }
 
     it 'assigns the requested answer to @answer' do
-      expect(assigns(:answer)).to eq @answer
+      expect(assigns(:answer)).to eq answer_with_user
     end
 
     it 'renders edit view' do
@@ -57,7 +59,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
-    sign_in_user
+    before { sign_in_user_x(user) }
+
     context 'with valid attributes' do
       it 'saves the new answer in the database' do
         expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(Answer, :count).by(1)
@@ -82,31 +85,32 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user_with_answer
+    before { sign_in_user_x(answer_with_user.user) }
+
     context 'valid attributes' do
       it 'assigns the requested answer to @answer' do
-        patch :update, question_id: @answer.question, id: @answer, answer: attributes_for(:answer)
-        expect(assigns(:answer)).to eq @answer
+        patch :update, question_id: answer_with_user.question, id: answer_with_user, answer: attributes_for(:answer)
+        expect(assigns(:answer)).to eq answer_with_user
       end
 
       it 'changes answer attributes' do
-        patch :update, question_id: @answer.question, id: @answer, answer: { body: "New body of answer" }
-        @answer.reload
-        expect(@answer.body).to eq "New body of answer"
+        patch :update, question_id: answer_with_user.question, id: answer_with_user, answer: { body: "New body of answer" }
+        answer_with_user.reload
+        expect(answer_with_user.body).to eq "New body of answer"
       end
 
       it 'redirects to the updated answer' do
-        patch :update, question_id: @answer.question, id: @answer, answer: attributes_for(:answer)
+        patch :update, question_id: answer_with_user.question, id: answer_with_user, answer: attributes_for(:answer)
         expect(response).to redirect_to [:question, :answer]
       end
     end
 
     context 'invalid attributes' do
-      before { patch :update, question_id: @answer.question, id: @answer, answer: { body: nil } }
+      before { patch :update, question_id: answer_with_user.question, id: answer_with_user, answer: { body: nil } }
 
       it 'does not change answer attributes' do
-        @answer.reload
-        expect(@answer.body).to eq "User's answer"
+        answer_with_user.reload
+        expect(answer_with_user.body).to eq "User's answer"
       end
 
       it 're-renders edit view' do
@@ -116,14 +120,14 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user_with_answer
+    before { sign_in_user_x(answer_with_user.user) }
 
     it 'deletes answer' do
-      expect { delete :destroy, question_id: @answer.question, id: @answer }.to change(Answer, :count).by(-1)
+      expect { delete :destroy, question_id: answer_with_user.question, id: answer_with_user }.to change(Answer, :count).by(-1)
     end
 
     it 'redirects to index view' do
-      delete :destroy, question_id: @answer.question, id: @answer
+      delete :destroy, question_id: answer_with_user.question, id: answer_with_user
       expect(response).to redirect_to question_answers_path
     end
   end
