@@ -13,11 +13,13 @@ feature 'Create question', %q{
 
     visit questions_path
     click_on 'Ask question'    
-    fill_in 'Title', with: 'Test question'
+    fill_in 'Title', with: 'My new question'
     fill_in 'Body', with: 'test text'
     click_on 'Save'
 
     expect(page).to have_content 'Your question successfully created.'
+    expect(page).to have_content 'My new question'
+    expect(current_path).to eq question_path(Question.last)
   end
 
   scenario 'Non-authenticated user tries to create a question' do

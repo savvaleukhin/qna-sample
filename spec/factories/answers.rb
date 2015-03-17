@@ -7,14 +7,14 @@ FactoryGirl.define do
     body "MyText"  
   end
 
-  factory :answer_list, class: "Answer" do
+  factory :answer_with_question, class: "Answer" do
     body
     question
 
     factory :answer_with_user do
       body "User's answer"
       user
-    end      
+    end
   end  
 
   factory :invalid_answer, class: "Answer" do

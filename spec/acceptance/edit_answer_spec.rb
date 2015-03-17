@@ -14,7 +14,6 @@ feature 'Edit anwer', %q{
   end
 
   scenario 'Authenticated user (not the owner) tries to edit an answer' do
-    answer_with_user
     sign_in(user_non_owner)
 
     visit edit_question_answer_path(answer_with_user.question, answer_with_user)
@@ -24,7 +23,6 @@ feature 'Edit anwer', %q{
   end
 
   scenario 'Authenticated user (owner) edits an answer' do
-    answer_with_user
     sign_in(answer_with_user.user)
 
     visit edit_question_answer_path(answer_with_user.question, answer_with_user)

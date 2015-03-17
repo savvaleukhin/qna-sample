@@ -14,7 +14,6 @@ feature 'Edit question', %q{
   end
 
   scenario 'Authenticated user (not the owner) tries to edit a question' do
-    question_with_user
     sign_in(user_non_owner)
 
     visit edit_question_path(question_with_user)
@@ -24,7 +23,6 @@ feature 'Edit question', %q{
   end
 
   scenario 'Authenticated user (owner) edits a question' do
-    question_with_user
     sign_in(question_with_user.user)
 
     visit edit_question_path(question_with_user)

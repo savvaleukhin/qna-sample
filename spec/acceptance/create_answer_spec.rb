@@ -11,18 +11,18 @@ feature 'Create answer', %q{
   
   scenario 'Authenticated user creates a question' do
     sign_in(user)
-    question
 
     visit question_path(question)
     click_on 'Post your answer'
-    fill_in 'Body', with: 'My answer'
+    fill_in 'Body', with: 'My new answer'
     click_on 'Save'
 
     expect(page).to have_content 'Your answer successfully created.'
+    expect(page).to have_content 'My new answer'
+    expect(current_path).to eq question_answer_path(question, Answer.last)
   end
 
   scenario 'Non-authenticated user tries to create a question' do
-    question
     
     visit question_path(question)
     click_on 'Post your answer'
