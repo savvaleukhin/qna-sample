@@ -8,25 +8,21 @@ feature 'Delete a question', %q{
   given(:user_non_owner) { create(:user) }
 
   scenario 'Non-authenticated user tries to delete a question' do
-    page.driver.submit :delete, question_path(question_with_user), {}
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
-    expect(current_path).to eq new_user_session_path
+    visit question_path(question_with_user)
+    expect(page).to_not have_selector(:link_or_button, 'Delete')
   end
 
   scenario 'Authenticated user (not the owner) tries to delete a question' do
     sign_in(user_non_owner)
+    visit question_path(question_with_user)
 
-    page.driver.submit :delete, question_path(question_with_user), {}
-
-    expect(page).to have_content 'You do not have permission to view this page.'
-    expect(current_path).to eq root_path
+    expect(page).to_not have_selector(:link_or_button, 'Delete')
   end
 
   scenario 'Authenticated user (owner) delete a question' do
     sign_in(question_with_user.user)
-
-    page.driver.submit :delete, question_path(question_with_user), {}
+    visit question_path(question_with_user)
+    click_on 'Delete'
 
     expect(page).to have_content 'Your question was successfully deleted.'
     expect(current_path).to eq questions_path
