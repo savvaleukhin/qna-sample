@@ -1,10 +1,12 @@
 require 'rails_helper'
 
-feature 'Delete an anwer', %q{
+feature 'Delete an answer', %q{
   User be able to delete his answer
 }do
 
-  given(:answer_with_user) { create(:answer_with_user) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
+  given(:answer_with_user) { create(:answer, user: user, question: question) }
   given(:user_non_owner) { create(:user) }
 
   scenario 'Non-authenticated user tries to delete an answer' do
