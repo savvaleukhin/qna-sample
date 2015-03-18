@@ -124,15 +124,43 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { sign_in_user(answer_with_user.user) }
+    context 'valid user' do
+      before { sign_in_user(answer_with_user.user) }
 
-    it 'deletes answer' do
-      expect { delete :destroy, question_id: answer_with_user.question, id: answer_with_user }.to change(Answer, :count).by(-1)
+      it 'deletes the answer' do
+        expect { delete :destroy, question_id: answer_with_user.question, id: answer_with_user }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to index view' do
+        delete :destroy, question_id: answer_with_user.question, id: answer_with_user
+        expect(response).to redirect_to question_answers_path
+      end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, question_id: answer_with_user.question, id: answer_with_user
-      expect(response).to redirect_to question_answers_path
+    context 'invalid user' do
+      before { sign_in_user(user) }
+
+      it 'can not to delete the answer' do
+        answer_with_user
+        expect { delete :destroy, question_id: answer_with_user.question, id: answer_with_user }.not_to change(Answer, :count)
+      end
+
+      it 'redirects to root path' do
+        delete :destroy, question_id: answer_with_user.question, id: answer_with_user
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'guest user' do
+      it 'can not to delete the answer' do
+        answer_with_user
+        expect { delete :destroy, question_id: answer_with_user.question, id: answer_with_user }.not_to change(Answer, :count)
+      end
+
+      it 'redirects to sign in page' do
+        delete :destroy, question_id: answer_with_user.question, id: answer_with_user
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 end
