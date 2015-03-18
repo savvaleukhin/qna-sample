@@ -4,4 +4,4 @@ h1 Question List
   ul
     - @questions.each do |q|
       li
-        = q.title
+        = link_to q.title, question_path(q)

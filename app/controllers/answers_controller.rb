@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.new(answer_params.merge({question_id: params[:question_id]}))
+    @answer = current_user.answers.build(answer_params.merge({question_id: params[:question_id]}))
 
     if @answer.save
       redirect_to question_answer_path(params[:question_id], @answer), notice: 'Your answer successfully created.'
