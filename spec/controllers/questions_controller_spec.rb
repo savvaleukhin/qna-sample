@@ -1,17 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
   let(:question_with_user) { create(:question_with_user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question_with_user, 2) }
 
     before { get :index }
 
     it 'populate an array of all questions' do
-      expect(assigns(:questions)).to match_array(@questions)
+      expect(assigns(:questions)).to match_array(questions)
     end
 
     it 'renders index view' do
@@ -20,10 +19,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    before { get :show, id: question }
+    before { get :show, id: question_with_user }
 
     it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
+      expect(assigns(:question)).to eq question_with_user
     end
 
     it 'redners show view' do
