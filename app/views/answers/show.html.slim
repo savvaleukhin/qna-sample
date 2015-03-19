@@ -1,0 +1,5 @@
+p= @answer.body
+
+- if user_signed_in? && current_user == @answer.user
+  p= link_to 'Edit', edit_question_answer_path(question_id: @answer.question, id: @answer)
+  p= link_to 'Delete', [@answer.question, @answer], method: :delete, data: { confirm: 'Are you sure?' }
