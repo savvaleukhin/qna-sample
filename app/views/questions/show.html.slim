@@ -5,9 +5,14 @@ p= @question.body
   p= link_to 'Edit', edit_question_path(@question)
   p= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
 
-- @question.answers.each do |answer|
-  p= answer.body
-  p= link_to 'show', question_answer_path(question_id: answer.question, id: answer)
+.answers
+  - @question.answers.each do |answer|
+    p= answer.body
+
+= form_for [@question, @answer] do |f|
+  = f.label :body, 'Your answer'
+  = f.text_area :body
+  = f.submit 'Save'
 
 
-p= link_to 'Post your answer', new_question_answer_path(@question)
+  p= link_to 'Post your answer', new_question_answer_path(@question)

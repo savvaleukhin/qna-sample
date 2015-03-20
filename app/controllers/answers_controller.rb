@@ -22,7 +22,7 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.build(answer_params.merge({question_id: params[:question_id]}))
 
     if @answer.save
-      redirect_to question_answer_path(params[:question_id], @answer), notice: 'Your answer successfully created.'
+      redirect_to question_path(params[:question_id]), notice: 'Your answer successfully created.'
     else
       render :new
     end

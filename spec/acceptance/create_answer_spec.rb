@@ -9,7 +9,7 @@ feature 'Create answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  scenario 'Authenticated user creates a question' do
+  scenario 'Authenticated user creates an answer' do
     sign_in(user)
 
     visit question_path(question)
@@ -21,7 +21,20 @@ feature 'Create answer', %q{
     expect(page).to have_content 'My new answer'
   end
 
-  scenario 'Non-authenticated user tries to create a question' do
+  scenario 'Anuthenticated user creates an answer using AJAX' do
+    sign_in(user)
+
+    visit question_path(question)
+    fill_in 'Your answer', with: 'My answer'
+    click_on 'Save'
+
+    expect(current_path).to eq question_path(question)
+    within '.answers' do
+      expect(page).to have_content 'My answer'
+    end
+  end
+
+  scenario 'Non-authenticated user tries to create an answer' do
 
     visit question_path(question)
     click_on 'Post your answer'
