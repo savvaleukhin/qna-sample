@@ -1,12 +1,13 @@
 h2= @question.title
 p= @question.body
 
-- if user_signed_in? && current_user == @question.user
+- if user_signed_in? && current_user.id == @question.user_id
   p= link_to 'Edit', edit_question_path(@question)
   p= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
 
 .answers
-  = render 'answers'
+  - if @question.answers.any?
+    = render 'answers'
 
 - if user_signed_in?
   = form_for [@question, @answer], remote: true do |f|

@@ -35,4 +35,13 @@ feature 'Show a question', %q{
     expect(page).to have_content 'test 1'
     expect(page).to have_content 'test 2'
   end
+
+  scenario 'User sees a question without any answers' do
+    visit question_path(question)
+    expect(page).to have_content 'question test'
+    expect(page).to have_content 'body of question test'
+    within '.answers' do
+      expect(page).to_not have_selector('table')
+    end
+  end
 end
