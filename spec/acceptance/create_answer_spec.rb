@@ -22,12 +22,13 @@ feature 'Create answer', %q{
     expect(page).to have_content 'My new answer'
   end
 =end
-  scenario 'Anuthenticated user creates an answer using AJAX', js: true do
+
+  scenario 'Authenticated user creates an answer using AJAX', js: true do
     sign_in(user)
 
     visit question_path(question)
     fill_in 'Your answer', with: 'My answer'
-    click_on 'Save'
+    click_on 'Create'
 
     expect(current_path).to eq question_path(question)
     within '.answers' do
@@ -35,11 +36,19 @@ feature 'Create answer', %q{
     end
   end
 
+=begin
   scenario 'Non-authenticated user tries to create an answer' do
 
     visit question_path(question)
     click_on 'Post your answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
+=end
+  scenario 'Non-authenticated user can not create an answer' do
+    visit question_path(question)
+
+    expect(page).to_not have_field('Your answer')
+    expect(page).to_not have_selector(:link_or_button, 'Create')
   end
 end

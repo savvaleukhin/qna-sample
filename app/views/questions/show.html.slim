@@ -8,10 +8,11 @@ p= @question.body
 .answers
   = render 'answers'
 
-= form_for [@question, @answer], remote: true do |f|
-  = f.label :body, 'Your answer'
-  = f.text_area :body
-  = f.submit 'Save'
+- if user_signed_in?
+  = form_for [@question, @answer], remote: true do |f|
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+    = f.submit 'Create'
 
 
-  p= link_to 'Post your answer', new_question_answer_path(@question)
+p= link_to 'Post your answer', new_question_answer_path(@question)

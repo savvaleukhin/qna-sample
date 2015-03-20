@@ -1,3 +1,7 @@
-- @question.answers.each do |answer|
-  p
-    = answer.body
+table
+  - @question.answers.each do |answer|
+    tr
+      td= answer.body
+      - if user_signed_in? && current_user == answer.user
+        td= link_to 'Edit', edit_question_answer_path(question_id: answer.question, id: answer)
+        td= link_to 'Delete', [answer.question, answer], method: :delete, data: { confirm: 'Are you sure?' }
