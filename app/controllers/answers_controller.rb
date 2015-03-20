@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:index, :new, :edit]
+  before_action :load_question, only: [:index, :new, :edit, :create]
   before_action :load_answer, only: [:show, :edit, :update, :destroy]
   before_action :correct_user, only: [:edit, :update, :destroy]
 
@@ -19,13 +19,17 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = current_user.answers.build(answer_params.merge({question_id: params[:question_id]}))
+    @question.answers.build(answer_params.merge({user_id: current_user.id}))
+    @question.save
+   # @answer = current_user.answers.build(answer_params.merge({question_id: params[:question_id]}))
 
+=begin
     if @answer.save
       redirect_to question_path(params[:question_id]), notice: 'Your answer successfully created.'
     else
       render :new
     end
+=end
   end
 
   def update

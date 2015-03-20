@@ -6,10 +6,9 @@ p= @question.body
   p= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
 
 .answers
-  - @question.answers.each do |answer|
-    p= answer.body
+  = render 'answers'
 
-= form_for [@question, @answer] do |f|
+= form_for [@question, @answer], remote: true do |f|
   = f.label :body, 'Your answer'
   = f.text_area :body
   = f.submit 'Save'

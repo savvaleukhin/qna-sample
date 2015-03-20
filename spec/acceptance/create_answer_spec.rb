@@ -9,6 +9,7 @@ feature 'Create answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
+=begin
   scenario 'Authenticated user creates an answer' do
     sign_in(user)
 
@@ -20,8 +21,8 @@ feature 'Create answer', %q{
     expect(page).to have_content 'Your answer successfully created.'
     expect(page).to have_content 'My new answer'
   end
-
-  scenario 'Anuthenticated user creates an answer using AJAX' do
+=end
+  scenario 'Anuthenticated user creates an answer using AJAX', js: true do
     sign_in(user)
 
     visit question_path(question)
