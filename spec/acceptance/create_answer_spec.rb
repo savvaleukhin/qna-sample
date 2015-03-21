@@ -51,4 +51,13 @@ feature 'Create answer', %q{
     expect(page).to_not have_field('Your answer')
     expect(page).to_not have_selector(:link_or_button, 'Create')
   end
+
+  scenario 'User tries to create invalid answer using AJAX', js: true do
+    sign_in(user)
+
+    visit question_path(question)
+    click_on 'Create'
+
+    expect(page).to have_content "Body can't be blank"
+  end
 end

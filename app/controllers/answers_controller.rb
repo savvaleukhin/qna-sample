@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @question.answers.build(answer_params.merge({user_id: current_user.id}))
+    @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
     @question.save
    # @answer = current_user.answers.build(answer_params.merge({question_id: params[:question_id]}))
 
