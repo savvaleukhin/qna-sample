@@ -33,11 +33,15 @@ class AnswersController < ApplicationController
   end
 
   def update
+    @answer.update(answer_params)
+    @question = @answer.question
+=begin
     if @answer.update(answer_params)
       redirect_to question_answer_path(params[:question_id], @answer)
     else
       render :edit
     end
+=end
   end
 
   def destroy

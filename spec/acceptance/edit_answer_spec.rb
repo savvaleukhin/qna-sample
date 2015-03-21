@@ -6,31 +6,39 @@ feature 'Edit anwer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given(:answer_with_user) { create(:answer, question: question, user: user) }
+  given(:answer) { create(:answer, question: question, user: user) }
   given(:user_non_owner) { create(:user) }
 
-  scenario 'Non-authenticated user tries to edit an answer' do
-    visit edit_question_answer_path(answer_with_user.question, answer_with_user)
+  scenario 'Non-authenticated user does not see Edit link' do
+    visit question_path(answer.question)
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    within '.answers' do
+      expect(page).to_not have_link 'Edit'
+    end
   end
 
-  scenario 'Authenticated user (not the owner) tries to edit an answer' do
+  scenario 'Authenticated user (not the owner) does not see Edit link' do
     sign_in(user_non_owner)
 
-    visit edit_question_answer_path(answer_with_user.question, answer_with_user)
+    visit question_path(answer.question)
 
-    expect(page).to have_content 'You do not have permission to view this page.'
-    expect(current_path).to eq root_path
+    within '.answers' do
+      expect(page).to_not have_link 'Edit'
+    end
   end
 
-  scenario 'Authenticated user (owner) edits an answer' do
-    sign_in(answer_with_user.user)
+  scenario 'Authenticated user (owner) edits an answer', js: true do
+    sign_in(answer.user)
 
-    visit edit_question_answer_path(answer_with_user.question, answer_with_user)
-    fill_in 'Body', with: 'Modified answer'
-    click_on 'Save'
+    visit question_path(answer.question)
+    within '.answers' do
+      click_on 'Edit'
+      fill_in 'Answer', with: 'Modified answer'
+      click_on 'Save'
 
-    expect(page).to have_content 'Modified answer'
+      expect(page).to_not have_content answer.body
+      expect(page).to have_content 'Modified answer'
+      expect(page).to_not have_selector 'textarea'
+    end
   end
 end
