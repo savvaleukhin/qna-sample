@@ -41,7 +41,7 @@ feature 'Show a question', %q{
     expect(page).to have_content 'question test'
     expect(page).to have_content 'body of question test'
     within '.answers' do
-      expect(page).to_not have_selector('table')
+      expect(page).to_not have_selector('p')
     end
   end
 end

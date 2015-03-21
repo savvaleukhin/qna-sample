@@ -1,52 +1,23 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:index, :new, :edit, :create]
-  before_action :load_answer, only: [:show, :edit, :update, :destroy]
-  before_action :correct_user, only: [:edit, :update, :destroy]
-
-  def index
-    @answers = @question.answers
-  end
-
-  def show
-  end
-
-  def new
-    @answer = Answer.new
-  end
-
-  def edit
-  end
+  before_action :authenticate_user!
+  before_action :load_question, only: [:create]
+  before_action :load_answer, only: [:update, :destroy]
+  before_action :correct_user, only: [:update, :destroy]
 
   def create
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
     @question.save
-   # @answer = current_user.answers.build(answer_params.merge({question_id: params[:question_id]}))
-
-=begin
-    if @answer.save
-      redirect_to question_path(params[:question_id]), notice: 'Your answer successfully created.'
-    else
-      render :new
-    end
-=end
   end
 
   def update
     @answer.update(answer_params)
     @question = @answer.question
-=begin
-    if @answer.update(answer_params)
-      redirect_to question_answer_path(params[:question_id], @answer)
-    else
-      render :edit
-    end
-=end
   end
 
   def destroy
+    @question = @answer.question
     @answer.destroy
-    redirect_to question_answers_path, notice: 'Your answer was successfully deleted.'
+    redirect_to question_path(@question), notice: 'Your answer was successfully deleted.'
   end
 
   private

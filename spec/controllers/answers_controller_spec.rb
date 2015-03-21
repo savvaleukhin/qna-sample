@@ -6,58 +6,6 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question, user: user) }
 
-  describe 'GET #index' do
-    let(:answers) { create_list(:answer, 2, question: question, user: user) }
-
-    before { get :index, question_id: question }
-
-    it 'populate array of all answers related to the question' do
-      expect(assigns(:answers)).to match_array(answers)
-    end
-
-    it 'renders index view' do
-      expect(response).to render_template :index
-    end
-  end
-
-  describe 'GET #show' do
-    before { get :show, question_id: question, id: answer }
-
-    it 'assigns the requested answer for specific question to @answer' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'renders show view' do
-      expect(response).to render_template :show
-    end
-  end
-
-  describe 'GET #new' do
-    before { sign_in_user(user) }
-    before { get :new, question_id: question, id: answer }
-
-    it 'assigns a new answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'renders new view' do
-      expect(response).to render_template :new
-    end
-  end
-
-  describe 'GET #edit' do
-    before { sign_in_user(answer.user) }
-    before { get :edit, question_id: answer.question, id: answer }
-
-    it 'assigns the requested answer to @answer' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'renders edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     before { sign_in_user(user) }
 
@@ -113,20 +61,14 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template :update
       end
     end
-=begin
+
     context 'invalid attributes' do
-      before { patch :update, question_id: answer.question, id: answer, answer: { body: nil } }
-
-      it 'does not change answer attributes' do
+      it 'does not change the answer in the database' do
+        patch :update, question_id: answer.question, id: answer, answer: { body: nil }, format: :js
         answer.reload
-        expect(answer.body).to eq "MyText"
-      end
-
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+        expect(answer.body).to eq 'MyText'
       end
     end
-=end
   end
 
   describe 'DELETE #destroy' do
@@ -139,7 +81,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to index view' do
         delete :destroy, question_id: answer.question, id: answer
-        expect(response).to redirect_to question_answers_path
+        expect(response).to redirect_to question_path(question)
       end
     end
 

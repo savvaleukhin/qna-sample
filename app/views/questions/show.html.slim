@@ -15,6 +15,3 @@ p= @question.body
     .answer-errors
     = f.text_area :body
     = f.submit 'Create'
-
-
-p= link_to 'Post your answer', new_question_answer_path(@question)
