@@ -24,10 +24,10 @@ feature 'Edit question', %q{
     end
   end
 
-  scenario 'Authenticated user (owner) edits the question using AJAX', js: true do
+  scenario 'Authenticated user (owner) tries to edit a questions', js: true do
     sign_in(question.user)
-
     visit question_path(question)
+
     within '.question' do
       click_on 'Edit'
       fill_in 'Title', with: 'Modified question'
