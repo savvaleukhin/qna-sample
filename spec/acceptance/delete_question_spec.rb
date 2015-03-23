@@ -32,4 +32,16 @@ feature 'Delete a question', %q{
     expect(page).to have_content 'Your question was successfully deleted.'
     expect(current_path).to eq questions_path
   end
+
+  scenario 'Authenticated user (owner) delete a question using AJAX', js: true do
+    sign_in(question_with_user.user)
+    visit questions_path
+
+    within '.questions' do
+      click_on 'Delete'
+    end
+
+    expect(page).to_not have_content 'MyString'
+    expect(current_path).to eq questions_path
+  end
 end

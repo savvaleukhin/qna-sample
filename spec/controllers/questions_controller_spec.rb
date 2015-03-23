@@ -127,13 +127,26 @@ RSpec.describe QuestionsController, type: :controller do
     context 'valid user' do
       before { sign_in_user(question_with_user.user) }
 
-      it 'deletes the question' do
-        expect { delete :destroy, id: question_with_user }.to change(Question, :count).by(-1)
+      describe 'using HTML' do
+        it 'deletes the question' do
+          expect { delete :destroy, id: question_with_user }.to change(Question, :count).by(-1)
+        end
+
+        it 'redirect to index view' do
+          delete :destroy, id: question_with_user
+          expect(response).to redirect_to questions_path
+        end
       end
 
-      it 'redirect to index view' do
-        delete :destroy, id: question_with_user
-        expect(response).to redirect_to questions_path
+      describe 'using AJAX' do
+        it 'deletes the question' do
+          expect { delete :destroy, id: question_with_user, format: :js }.to change(Question, :count).by(-1)
+        end
+
+        it 'renders destroy template' do
+          delete :destroy, id: question_with_user, format: :js
+          expect(response).to render_template :destroy
+        end
       end
     end
 

@@ -40,8 +40,13 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
+    @questions = Question.all
     @question.destroy
-    redirect_to questions_path, notice: 'Your question was successfully deleted.'
+
+    respond_to do |format|
+      format.html { redirect_to questions_path, notice: 'Your question was successfully deleted.' }
+      format.js
+    end
   end
 
   private
