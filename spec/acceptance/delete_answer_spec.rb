@@ -26,15 +26,15 @@ feature 'Delete an answer', %q{
     end
   end
 
-  scenario 'Authenticated user (owner) delete an answer' do
+  scenario 'Authenticated user (owner) delete an answer using AJAX', js: true do
     sign_in(answer.user)
     visit question_path(answer.question)
 
     within '.answers' do
       click_on 'Delete'
-    end
 
-    expect(page).to have_content 'Your answer was successfully deleted.'
+      expect(page).to_not have_content 'MyText'
+    end
     expect(current_path).to eq question_path(answer.question)
   end
 end

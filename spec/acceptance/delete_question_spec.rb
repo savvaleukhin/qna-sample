@@ -9,21 +9,26 @@ feature 'Delete a question', %q{
 
   scenario 'Non-authenticated user tries to delete a question' do
     visit question_path(question_with_user)
-    expect(page).to_not have_selector(:link_or_button, 'Delete')
+    expect(page).to_not have_link 'Delete'
   end
 
   scenario 'Authenticated user (not the owner) tries to delete a question' do
     sign_in(user_non_owner)
     visit question_path(question_with_user)
 
-    expect(page).to_not have_selector(:link_or_button, 'Delete')
+    expect(page).to_not have_link 'Delete'
   end
 
   scenario 'Authenticated user (owner) delete a question' do
     sign_in(question_with_user.user)
     visit question_path(question_with_user)
-    click_on 'Delete'
 
+    within '.question' do
+      click_on 'Delete'
+    end
+
+    expect(page).to_not have_content 'MyString'
+    expect(page).to_not have_content 'MyText'
     expect(page).to have_content 'Your question was successfully deleted.'
     expect(current_path).to eq questions_path
   end
