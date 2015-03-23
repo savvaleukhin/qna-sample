@@ -3,7 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  console.log("DOM is ready")
   $('.edit-answer-link').click (e) ->
     e.preventDefault();
     $(this).hide();
