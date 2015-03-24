@@ -1,13 +1,14 @@
-- @question.answers.each do |answer|
+- @question.answers.by_top.each do |answer|
   - if answer.persisted?
     - if answer.accepted == true
       .accepted-answer
         p= answer.body
     - else
       p= answer.body
-    - if answer.accepted == true
-      p This answer is accepted
-    p= link_to 'Accept', accept_question_answer_path(@question, answer), method: :post
+
+    - if user_signed_in? && current_user.id == @question.user_id
+      p= link_to 'Accept', accept_question_answer_path(@question, answer), remote: true, method: :post unless answer.accepted == true
+
     - if user_signed_in? && current_user.id == answer.user_id
       p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
       p= link_to 'Delete', [answer.question, answer], remote: true, method: :delete

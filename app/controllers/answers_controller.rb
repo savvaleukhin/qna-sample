@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_question, only: [:create]
+  before_action :load_question, only: [:create, :accept]
   before_action :load_answer, only: [:update, :destroy, :accept]
   before_action :correct_user, only: [:update, :destroy]
 
@@ -20,8 +20,7 @@ class AnswersController < ApplicationController
   end
 
   def accept
-    @answer.accept
-    redirect_to question_path(@answer.question_id)
+    @answer.accept if current_user.id == @question.user_id
   end
 
   private

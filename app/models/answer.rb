@@ -3,18 +3,16 @@ class Answer < ActiveRecord::Base
   belongs_to :user
 
   validates :user_id, :body, presence: true
+  scope :by_top, -> { order('accepted DESC') }
 
   def accept
-    question = Question.find(self.question_id)
-    accepted_answers = question.answers.where(accepted: true)
+    accepted_answers =  Question.find(self.question_id).answers.where(accepted: true)
 
     if accepted_answers.count > 0
       accepted_answers.each do |answer|
-        answer.accepted = false
-        answer.save
+        answer.update(accepted: false) unless answer == self
       end
     end
-    self.accepted = true
-    self.save
+    self.update(accepted: true)
   end
 end

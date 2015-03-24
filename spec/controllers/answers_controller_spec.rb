@@ -79,7 +79,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, question_id: answer.question, id: answer, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to index view' do
+      it 'renders destroy tempate' do
         delete :destroy, question_id: answer.question, id: answer, format: :js
         expect(response).to render_template :destroy
       end
@@ -108,6 +108,35 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirects to sign in page' do
         delete :destroy, question_id: answer.question, id: answer
         expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
+
+  describe 'POST #accept' do
+    context 'valid user' do
+      before { sign_in_user(answer.user) }
+
+      it 'marks the answer as Accepted' do
+        expect { post :accept, question_id: answer.question, id: answer, format: :js }.to change { answer.reload.accepted }.from(false).to(true)
+      end
+
+      it 'renders accept template' do
+        post :accept, question_id: answer.question, id: answer, format: :js
+        expect(response).to render_template :accept
+      end
+    end
+
+    context 'invalid user' do
+      before { sign_in_user(wrong_user) }
+
+      it 'can not mark the answer as Accepted' do
+        expect { post :accept, question_id: answer.question, id: answer, format: :js }.not_to change { answer.reload.accepted }
+      end
+    end
+
+    context 'guest user' do
+      it 'can not mark the answer as Accepted' do
+        expect { post :accept, question_id: answer.question, id: answer, format: :js }.not_to change { answer.reload.accepted }
       end
     end
   end
