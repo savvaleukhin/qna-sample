@@ -5,10 +5,5 @@
 <% else %>
   $('.answers').html('<%= j render 'questions/answers' %>');
   $('#new_answer').find('#answer_body').val('');
-  $('.edit-answer-link').click(function(e){
-    e.preventDefault();
-    $(this).hide();
-    answer_id = $(this).data('answerId');
-    $('form#edit-answer-' + answer_id).show();
-  });
+  $('.edit-answer-link').click(editAnswerFunction);
 <% end %>
