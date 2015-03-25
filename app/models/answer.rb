@@ -6,13 +6,9 @@ class Answer < ActiveRecord::Base
   scope :by_top, -> { order('accepted DESC') }
 
   def accept
-    accepted_answers =  Question.find(self.question_id).answers.where(accepted: true)
-
-    if accepted_answers.count > 0
-      accepted_answers.each do |answer|
-        answer.update(accepted: false) unless answer == self
-      end
+    Answer.transaction do
+      Answer.where(question_id: question_id, accepted: true).update_all(accepted: false)
+      update(accepted: true)
     end
-    self.update(accepted: true)
   end
 end

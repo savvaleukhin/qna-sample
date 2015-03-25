@@ -3,6 +3,7 @@ class AnswersController < ApplicationController
   before_action :load_question, only: [:create, :accept]
   before_action :load_answer, only: [:update, :destroy, :accept]
   before_action :correct_user, only: [:update, :destroy]
+  before_action :question_owner, only: :accept
 
   def create
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
@@ -20,7 +21,7 @@ class AnswersController < ApplicationController
   end
 
   def accept
-    @answer.accept if current_user.id == @question.user_id
+    @answer.accept
   end
 
   private
@@ -40,6 +41,12 @@ class AnswersController < ApplicationController
   def correct_user
     unless @answer.user == current_user
       redirect_to root_path, notice: 'You do not have permission to view this page.'
+    end
+  end
+
+  def question_owner
+    unless @question.user_id == current_user.id
+      render :text => 'You do not have permission to view this page.', :status => 403
     end
   end
 end

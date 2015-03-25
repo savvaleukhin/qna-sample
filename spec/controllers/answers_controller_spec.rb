@@ -131,12 +131,14 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can not mark the answer as Accepted' do
         expect { post :accept, question_id: answer.question, id: answer, format: :js }.not_to change { answer.reload.accepted }
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
     context 'guest user' do
       it 'can not mark the answer as Accepted' do
         expect { post :accept, question_id: answer.question, id: answer, format: :js }.not_to change { answer.reload.accepted }
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
