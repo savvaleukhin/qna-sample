@@ -46,7 +46,7 @@ class AnswersController < ApplicationController
 
   def question_owner
     unless @question.user_id == current_user.id
-      render :text => 'You do not have permission to view this page.', :status => 403
+      render text: 'You do not have permission to view this page.', status: 403
     end
   end
 end

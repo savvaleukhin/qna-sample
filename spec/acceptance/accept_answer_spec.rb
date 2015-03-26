@@ -8,7 +8,8 @@ feature 'Accept answer', %q{
   given(:user) { create(:user) }
   given(:user_non_owner) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given(:answer) { create(:answer, user: user, question: question) }
+  given(:answer) { create(:answer, user: user, question: question, body: 'Accepted answer') }
+  given(:answers) { create_list(:answer, 2, user: user, question: question) }
 
   scenario 'Authenticated user (owner of question) marks the answer as Accepted', js: true do
     sign_in(user)
@@ -28,5 +29,20 @@ feature 'Accept answer', %q{
 
     visit question_path(answer.question)
     expect(page).to_not have_link 'Accept'
+  end
+
+  scenario 'Accepted answer is the first answer on the page', js: true do
+    sign_in(user)
+    answers
+
+    visit question_path(answer.question)
+    within "#answer-#{answer.id}" do
+      click_on 'Accept'
+    end
+
+    first_answer_on_page = page.find('.answers .answer:first-child')
+
+    expect(page).to have_selector('.answer', count: 3)
+    expect(first_answer_on_page).to have_content answer.body
   end
 end
