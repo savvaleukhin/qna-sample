@@ -2,8 +2,16 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$ ->
-  $('.edit-question-link').click (e) ->
-    e.preventDefault();
-    $(this).hide();
-    $('#edit-question').show();
+editQuestionFunction = (e) ->
+  e.preventDefault();
+  $(this).hide();
+  $('#edit-question').show();
+
+editAnswerFunction = (e) ->
+  e.preventDefault();
+  $(this).hide();
+  answer_id = $(this).data('answerId');
+  $('form#edit-answer-' + answer_id).show();
+
+$(document).on 'click', '.answers .edit-answer-link', editAnswerFunction
+$(document).on 'click', '.question .edit-question-link', editQuestionFunction
