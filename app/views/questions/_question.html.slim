@@ -1,6 +1,13 @@
 h2= @question.title
 p= @question.body
 - if user_signed_in? && current_user.id == @question.user_id
+
+  - if @question.attachments.any?
+    .attachments
+      ul
+       - @question.attachments.each do |attachment|
+          li= attachment.file.file.filename
+
   p= link_to 'Edit', '', class: 'edit-question-link'
   p= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
   .question-errors
