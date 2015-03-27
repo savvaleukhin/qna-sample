@@ -4,6 +4,12 @@
     div id="answer-#{answer.id}" class=(answer.accepted == true ? "accepted-answer answer" : "answer")
       p= answer.body
 
+      - if answer.attachments.any?
+        .attachments
+          ul
+           - answer.attachments.each do |attachment|
+              li= link_to attachment.file.filename, attachment.file.url
+
       - if user_signed_in? && current_user.id == @question.user_id
         = link_to 'Accept', accept_question_answer_path(@question, answer), remote: true, method: :post unless answer.accepted == true
 

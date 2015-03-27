@@ -1,12 +1,12 @@
 h2= @question.title
 p= @question.body
-- if user_signed_in? && current_user.id == @question.user_id
+- if @question.attachments.any?
+  .attachments
+    ul
+     - @question.attachments.each do |attachment|
+        li= link_to attachment.file.filename, attachment.file.url
 
-  - if @question.attachments.any?
-    .attachments
-      ul
-       - @question.attachments.each do |attachment|
-          li= link_to attachment.file.filename, attachment.file.url
+- if user_signed_in? && current_user.id == @question.user_id
 
   p= link_to 'Edit', '', class: 'edit-question-link'
   p= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
