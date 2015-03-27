@@ -6,7 +6,7 @@ p= @question.body
     .attachments
       ul
        - @question.attachments.each do |attachment|
-          li= attachment.file.file.filename
+          li= link_to attachment.file.filename, attachment.file.url
 
   p= link_to 'Edit', '', class: 'edit-question-link'
   p= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
