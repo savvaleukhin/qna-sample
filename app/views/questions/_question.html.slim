@@ -2,9 +2,12 @@ h2= @question.title
 p= @question.body
 - if @question.attachments.any?
   .attachments
-    ul
+    table
      - @question.attachments.each do |attachment|
-        li= link_to attachment.file.filename, attachment.file.url
+        tr id="attachment-#{attachment.id}"
+          td= link_to attachment.file.filename, attachment.file.url
+          - if user_signed_in? && current_user.id == @question.user_id
+            td= link_to 'remove', attachment, remote: true, method: :delete
 
 - if user_signed_in? && current_user.id == @question.user_id
 
