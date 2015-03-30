@@ -3,6 +3,8 @@
 class FileUploader < CarrierWave::Uploader::Base
   delegate :filename, to: :file
 
+  after :remove, :delete_empty_upstream_dirs
+
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
@@ -49,4 +51,11 @@ class FileUploader < CarrierWave::Uploader::Base
   #   "something.jpg" if original_filename
   # end
 
+  def delete_empty_upstream_dirs
+    path = ::File.expand_path(store_dir, root)
+    Dir.delete(path)
+
+  rescue SystemCallError
+    true
+  end
 end
