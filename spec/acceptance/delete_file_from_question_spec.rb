@@ -1,6 +1,6 @@
 require_relative 'acceptance_helper'
 
-feature 'Delete attachments', %q{
+feature 'Delete attachments from question', %q{
   As an owner user be able to delete an attachment
 }do
 
@@ -13,7 +13,6 @@ feature 'Delete attachments', %q{
     sign_in(user)
     visit question_path(question)
     within '.attachments' do
-      save_and_open_page
       click_on 'remove'
       expect(page).to_not have_link 'spec_helper.rb'
     end

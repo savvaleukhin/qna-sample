@@ -15,7 +15,7 @@ class AttachmentsController < ApplicationController
 
   def correct_user
     unless @attachment.attachmentable.user_id == current_user.id
-      render text: 'You do not have permission to view this page.', status: 403
+      render text: 'You do not have permission to view this page.', status: :forbidden
     end
   end
 end
