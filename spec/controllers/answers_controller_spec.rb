@@ -9,7 +9,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     before { sign_in_user(user) }
 
-    context 'with valid attributes' do
+    context 'JS with valid attributes' do
       it 'saves the new answer in the database' do
         expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.to change(Answer, :count).by(1)
       end
@@ -24,7 +24,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'with invalid attributes' do
+    context 'JS with invalid attributes' do
       it 'does not save new answer in the database' do
         expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
       end
@@ -32,6 +32,22 @@ RSpec.describe AnswersController, type: :controller do
       it 're-renders create view' do
         post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
         expect(response).to render_template :create
+      end
+    end
+
+    context 'JSON with valid attributes' do
+      it 'saves the new answer in the database' do
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :json }.to change(Answer, :count).by(1)
+      end
+
+      it 'associates the new answer with the question' do
+        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :json }.to change(question.answers, :count).by(1)
+      end
+
+      it 'response' do
+        post :create, question_id: question, answer: attributes_for(:answer), format: :json
+        expect(response.status).to eq 200
+        expect(response.body).to eq answer.to_json
       end
     end
   end

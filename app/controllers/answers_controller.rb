@@ -7,7 +7,17 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
-    @question.save
+    #@question.save
+
+    respond_to do |format|
+      if @answer.save
+        format.js
+        format.json { render json: @answer }
+      else
+        format.js
+        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+      end
+    end
   end
 
   def update

@@ -6,7 +6,7 @@
     = render 'answers'
 
 - if user_signed_in?
-  = nested_form_for [@question, @answer], remote: true do |f|
+  = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
     = f.label :body, 'Your answer'
     .answer-errors
     = f.text_area :body
