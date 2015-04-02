@@ -9,7 +9,7 @@ feature 'Create answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  scenario 'Authenticated user creates an answer using AJAX', js: true do
+  scenario 'Authenticated user creates an answer using AJAX', js: true, data: { type: :js } do
     sign_in(user)
 
     visit question_path(question)
@@ -29,7 +29,7 @@ feature 'Create answer', %q{
     expect(page).to_not have_link('Create')
   end
 
-  scenario 'User tries to create invalid answer using AJAX', js: true do
+  scenario 'User tries to create invalid answer using AJAX', js: true, data: { type: :js } do
     sign_in(user)
 
     visit question_path(question)

@@ -46,8 +46,10 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'response' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :json
+        new_answer = Answer.find_by!(body: answer.body)
+
         expect(response.status).to eq 200
-        expect(response.body).to eq answer.to_json
+        expect(response.body).to eq new_answer.to_json
       end
     end
   end

@@ -7,12 +7,11 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
-    #@question.save
 
     respond_to do |format|
       if @answer.save
         format.js
-        format.json { render json: @answer }
+        format.json { render json: @answer.to_json(except: [:created_at, :updated_at], include: { attachments: { only: [:id, :file] } }) }
       else
         format.js
         format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
@@ -21,8 +20,17 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params)
     @question = @answer.question
+
+    respond_to do |format|
+      if @answer.update(answer_params)
+        format.js
+        format.json { render json: @answer.to_json(except: [:created_at, :updated_at], include: { attachments: { only: [:id, :file] } }) }
+      else
+        format.js
+        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy

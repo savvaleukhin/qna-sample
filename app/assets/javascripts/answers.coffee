@@ -5,7 +5,8 @@
 $ ->
   $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
     answer = $.parseJSON(xhr.responseText)
-    $('.answers').append(answer.body)
+    $('.answers').append(
+      "<div id='answer-#{answer.id}' class='answer'><p>#{answer.body}</p></div>")
   .bind 'ajax:error', (e, xhr, status, error) ->
     errors = $.parseJSON(xhr.responseText)
     $('.answer-errors').html('')
