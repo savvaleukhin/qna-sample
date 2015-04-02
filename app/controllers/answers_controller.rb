@@ -11,7 +11,7 @@ class AnswersController < ApplicationController
     respond_to do |format|
       if @answer.save
         format.js
-        format.json { render json: @answer.to_json(except: [:created_at, :updated_at], include: { attachments: { only: [:id, :file] } }) }
+        format.json { render json: @answer.to_json(except: [:created_at, :updated_at]) }
       else
         format.js
         format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
@@ -25,7 +25,7 @@ class AnswersController < ApplicationController
     respond_to do |format|
       if @answer.update(answer_params)
         format.js
-        format.json { render json: @answer.to_json(except: [:created_at, :updated_at], include: { attachments: { only: [:id, :file] } }) }
+        format.json { render json: @answer.to_json(except: [:created_at, :updated_at]) }
       else
         format.js
         format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }

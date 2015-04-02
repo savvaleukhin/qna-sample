@@ -49,7 +49,18 @@ RSpec.describe AnswersController, type: :controller do
         new_answer = Answer.find_by!(body: answer.body)
 
         expect(response.status).to eq 200
-        expect(response.body).to eq new_answer.to_json
+        expect(response.body).to eq new_answer.to_json(except: [:created_at, :updated_at])
+      end
+    end
+
+    context 'JSON with invalid attributes' do
+      it 'does not save new answer in the database' do
+        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json }.to_not change(Answer, :count)
+      end
+
+      it 'unprocessable entity' do
+        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :json
+        expect(response.status).to eq 422
       end
     end
   end
@@ -57,7 +68,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #update' do
     before { sign_in_user(answer.user) }
 
-    context 'valid attributes' do
+    context 'JS valid attributes' do
       it 'assigns the requested answer to @answer' do
         patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :js
         expect(assigns(:answer)).to eq answer
@@ -80,9 +91,41 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'invalid attributes' do
+    context 'JS invalid attributes' do
       it 'does not change the answer in the database' do
         patch :update, question_id: answer.question, id: answer, answer: { body: nil }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'MyText'
+      end
+    end
+
+    context 'JSON valid attributes' do
+      it 'assigns the requested answer to @answer' do
+        patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :json
+        expect(response.status).to eq 200
+        expect(response.body).to eq answer.to_json(except: [:created_at, :updated_at])
+      end
+
+      it 'assigns the question for requested answer to @question' do
+        patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :json
+        expect(assigns(:question)).to eq answer.question
+      end
+
+      it 'changes answer attributes' do
+        patch :update, question_id: answer.question, id: answer, answer: { body: "New body of answer" }, format: :json
+        answer.reload
+        expect(answer.body).to eq "New body of answer"
+      end
+
+      it 'renders update tempate' do
+        patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :json
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'JSON invalid attributes' do
+      it 'does not change the answer in the database' do
+        patch :update, question_id: answer.question, id: answer, answer: { body: nil }, format: :json
         answer.reload
         expect(answer.body).to eq 'MyText'
       end
