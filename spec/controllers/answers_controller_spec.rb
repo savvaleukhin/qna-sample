@@ -46,10 +46,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'response' do
         post :create, question_id: question, answer: attributes_for(:answer), format: :json
-        new_answer = Answer.find_by!(body: answer.body)
-
         expect(response.status).to eq 200
-        expect(response.body).to eq new_answer.to_json(except: [:created_at, :updated_at])
       end
     end
 
@@ -100,12 +97,6 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'JSON valid attributes' do
-      it 'assigns the requested answer to @answer' do
-        patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :json
-        expect(response.status).to eq 200
-        expect(response.body).to eq answer.to_json(except: [:created_at, :updated_at])
-      end
-
       it 'assigns the question for requested answer to @question' do
         patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :json
         expect(assigns(:question)).to eq answer.question
@@ -117,9 +108,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq "New body of answer"
       end
 
-      it 'renders update tempate' do
+      it 'response' do
         patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :json
-        expect(response).to render_template :update
+        expect(response.status).to eq 200
       end
     end
 

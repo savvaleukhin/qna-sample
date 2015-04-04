@@ -6,17 +6,18 @@ $ ->
 
   $('form#new_answer').bind 'ajax:success', (e, data, status, xhr) ->
     answer = $.parseJSON(xhr.responseText)
-    $('.answers').append(
-      "<div id='answer-#{answer.id}' class='answer'><p>#{answer.body}</p></div>")
-    $("#answer-#{answer.id}").append("
-      <div class='attachments'>
-        <table>
-          <tbody>
-            <tr id='attachment-#{answer.attachments[0].id}'><td><a href='#{answer.attachments[0].url}'>#{answer.attachments[0].filename}</a></td></tr>
-          </tbody>
-        </table>
-      </div>
-    ")
+    $('.answers').append(HandlebarsTemplates['answers/create'](answer))
+  .bind 'ajax:error', (e, xhr, status, error) ->
+    errors = $.parseJSON(xhr.responseText)
+    $('.answer-errors').html('')
+    $.each errors, (index, value) ->
+      $('.answer-errors').append(value)
+
+  $('form.edit_answer').bind 'ajax:success', (e, data, status, xhr) ->
+    answer = $.parseJSON(xhr.responseText)
+    $(this).hide()
+    $('#answer-' + answer.id).find("p:first-child").html(answer.body)
+    $('.edit-answer-link').show()
   .bind 'ajax:error', (e, xhr, status, error) ->
     errors = $.parseJSON(xhr.responseText)
     $('.answer-errors').html('')

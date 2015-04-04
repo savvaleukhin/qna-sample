@@ -16,4 +16,6 @@
 //= require jquery.remotipart
 //= require jquery_nested_form
 //= require turbolinks
+//= require handlebars
+//= require_tree ./templates
 //= require_tree .

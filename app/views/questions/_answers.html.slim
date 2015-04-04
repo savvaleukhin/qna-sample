@@ -14,7 +14,7 @@
                 td= link_to 'remove', attachment, remote: true, method: :delete
 
       - if user_signed_in? && current_user.id == @question.user_id
-        = link_to 'Accept', accept_question_answer_path(@question, answer), remote: true, method: :post unless answer.accepted == true
+        p= link_to 'Accept', accept_question_answer_path(@question, answer), remote: true, method: :post unless answer.accepted == true
 
       - if user_signed_in? && current_user.id == answer.user_id
         p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
