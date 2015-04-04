@@ -2,6 +2,7 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :user
   has_many :attachments, as: :attachmentable, dependent: :destroy
+  has_many :votes, as: :votable, dependent: :destroy
 
   validates :user_id, :body, presence: true
   accepts_nested_attributes_for :attachments, reject_if: -> (a) { a[:file].blank? }, allow_destroy: true

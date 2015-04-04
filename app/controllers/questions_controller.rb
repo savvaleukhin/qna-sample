@@ -44,6 +44,12 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def vote
+    @question = Question.find(params[:question_id])
+    @question.vote(current_user, params[:value])
+    redirect_to question_path(@question)
+  end
+
   private
 
   def load_question
