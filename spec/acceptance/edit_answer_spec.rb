@@ -27,7 +27,7 @@ feature 'Edit anwer', %q{
     end
   end
 
-  scenario 'Authenticated user (owner) edits an answer', js: true do
+  scenario 'Authenticated user (owner) edits an answer', js: true, data: { type: :json } do
     sign_in(answer.user)
 
     visit question_path(answer.question)
