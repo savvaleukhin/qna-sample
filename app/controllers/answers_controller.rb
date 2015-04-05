@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [:update, :destroy, :accept]
   before_action :correct_user, only: [:update, :destroy]
   before_action :question_owner, only: :accept
+  before_action :user_can_vote, only: [:vote, :unvote]
 
   def create
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
@@ -42,6 +43,16 @@ class AnswersController < ApplicationController
     @answer.accept
   end
 
+  def vote
+    @answer.vote(current_user, params[:value])
+    render 'vote'
+  end
+
+  def unvote
+    @answer.unvote(current_user)
+    render 'vote'
+  end
+
   private
 
   def load_question
@@ -64,6 +75,14 @@ class AnswersController < ApplicationController
 
   def question_owner
     unless @question.user_id == current_user.id
+      render text: 'You do not have permission to view this page.', status: 403
+    end
+  end
+
+  def user_can_vote
+    @answer = Answer.find(params[:id])
+
+    if @answer.user == current_user.id
       render text: 'You do not have permission to view this page.', status: 403
     end
   end

@@ -2,12 +2,16 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :questions do
-    post :vote
+    member do
+      post :vote
+      post :unvote
+    end
 
     resources :answers, only: [:create, :update, :destroy] do
       member do
         post :accept
         post :vote
+        post :unvote
       end
     end
   end

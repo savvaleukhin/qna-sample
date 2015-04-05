@@ -4,6 +4,9 @@
     div id="answer-#{answer.id}" class=(answer.accepted == true ? "accepted-answer answer" : "answer")
       p= answer.body
 
+      div id='answer-#{answer.id}-votes'
+        = render partial: 'questions/votes', object:  answer, as: 'answer'
+
       - if answer.attachments.any?
         .attachments
           table

@@ -1,9 +1,12 @@
 h2= @question.title
-h4= @question.total_votes
+
+.question_votes
+  h4= @question.total_votes
 
 - if user_signed_in? && current_user.id != @question.user_id
-  p= link_to "up", question_vote_path(@question, value: 1), method: "post"
-  p= link_to "down", question_vote_path(@question, value: -1), method: "post"
+  p= link_to "up", vote_question_path(@question, value: 1), remote: true, method: "post"
+  p= link_to "down", vote_question_path(@question, value: -1), remote: true, method: "post"
+  p= link_to "unvote", unvote_question_path(@question), remote: true, method: "post"
 
 p= @question.body
 
