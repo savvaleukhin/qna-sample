@@ -13,10 +13,10 @@ feature 'Vote for answers', %q{
   context 'Authenticated user' do
     before do
       sign_in(user)
-      visit question_path(answer.question)
     end
 
     scenario 'can vote UP', js: true do
+      visit question_path(answer.question)
       within '.answers' do
         click_on 'up'
       end
@@ -27,6 +27,7 @@ feature 'Vote for answers', %q{
     end
 
     scenario 'can vote DOWN', js: true do
+      visit question_path(answer.question)
       within '.answers' do
         click_on 'down'
       end
@@ -37,6 +38,7 @@ feature 'Vote for answers', %q{
     end
 
     scenario 'can unvote', js: true do
+      visit question_path(answer.question)
       within '.answers' do
         click_on 'up'
         click_on 'unvote'

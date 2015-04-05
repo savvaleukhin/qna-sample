@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
-  let(:wrong_user) { create(:user) }
+  let(:non_author) { create(:user) }
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question, user: user) }
 
@@ -138,7 +138,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'invalid user' do
-      before { sign_in_user(wrong_user) }
+      before { sign_in_user(non_author) }
 
       it 'can not to delete the answer' do
         answer
@@ -179,7 +179,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'invalid user' do
-      before { sign_in_user(wrong_user) }
+      before { sign_in_user(non_author) }
 
       it 'can not mark the answer as Accepted' do
         expect { post :accept, question_id: answer.question, id: answer, format: :js }.not_to change { answer.reload.accepted }
@@ -190,6 +190,64 @@ RSpec.describe AnswersController, type: :controller do
     context 'guest user' do
       it 'can not mark the answer as Accepted' do
         expect { post :accept, question_id: answer.question, id: answer, format: :js }.not_to change { answer.reload.accepted }
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'POST #vote' do
+    context 'valid user' do
+      before { sign_in_user(non_author) }
+
+      it 'votes UP for the answer' do
+        expect { post :vote, question_id: answer.question, id: answer, value: 1, format: :js }.to change(Vote, :count).by(1)
+      end
+
+      it 'votes DOWN for the answer' do
+        expect { post :vote, question_id: answer.question, id: answer, value: -1, format: :js }.to change(Vote, :count).by(1)
+      end
+    end
+
+    context 'invalid user' do
+      before { sign_in_user(answer.user) }
+
+      it 'can not vote for the answer' do
+        expect { post :vote, question_id: answer.question, id: answer, value: 1, format: :js }.not_to change(Vote, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'guest user' do
+      it 'can not vote for the answer' do
+        expect { post :vote, question_id: answer.question, id: answer, value: 1, format: :js }.not_to change(Vote, :count)
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe 'POST #unvote' do
+    before { create(:vote, user_id: non_author.id, votable_id: answer.id, votable_type: answer.class.name) }
+
+    context 'valid user' do
+      before { sign_in_user(non_author) }
+
+      it 'unvotes' do
+        expect { post :unvote, question_id: answer.question, id: answer, format: :js }.to change(Vote, :count).by(-1)
+      end
+    end
+
+    context 'invalid user' do
+      before { sign_in_user(answer.user) }
+
+      it 'can not unvote' do
+        expect { post :unvote, question_id: answer.question, id: answer, format: :js }.not_to change(Vote, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'guest user' do
+      it 'can not unvote' do
+        expect { post :unvote, question_id: answer.question, id: answer, format: :js }.not_to change(Vote, :count)
         expect(response).to have_http_status(:unauthorized)
       end
     end
