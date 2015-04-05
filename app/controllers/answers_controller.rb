@@ -82,7 +82,7 @@ class AnswersController < ApplicationController
   def user_can_vote
     @answer = Answer.find(params[:id])
 
-    if @answer.user == current_user.id
+    if @answer.user_id == current_user.id
       render text: 'You do not have permission to view this page.', status: 403
     end
   end
