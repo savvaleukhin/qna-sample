@@ -1,34 +1,34 @@
-h2= @question.title
+h2= question.title
 
 .question_votes
-  h4= @question.total_votes
+  h4= question.total_votes
 
-- if user_signed_in? && current_user.id != @question.user_id
-  - if @question.voted_by?(current_user)
+- if user_signed_in? && current_user.id != question.user_id
+  - if question.voted_by?(current_user)
     p your vote:
-    p= @question.vote_by(current_user)
-    p= link_to "unvote", unvote_question_path(@question), remote: true, method: "post"
+    p= question.vote_by(current_user)
+    p= link_to "unvote", unvote_question_path(question), remote: true, method: "post"
   - else
-    p= link_to "up", vote_question_path(@question, value: 1), remote: true, method: "post"
-    p= link_to "down", vote_question_path(@question, value: -1), remote: true, method: "post"
+    p= link_to "up", vote_question_path(question, value: 1), remote: true, method: "post"
+    p= link_to "down", vote_question_path(question, value: -1), remote: true, method: "post"
 
-p= @question.body
+p= question.body
 
-- if @question.attachments.any?
+- if question.attachments.any?
   .attachments
     table
-     - @question.attachments.each do |attachment|
+     - question.attachments.each do |attachment|
         tr id="attachment-#{attachment.id}"
           td= link_to attachment.file.filename, attachment.file.url
-          - if user_signed_in? && current_user.id == @question.user_id
+          - if user_signed_in? && current_user.id == question.user_id
             td= link_to 'remove', attachment, remote: true, method: :delete
 
-- if user_signed_in? && current_user.id == @question.user_id
+- if user_signed_in? && current_user.id == question.user_id
 
   p= link_to 'Edit', '', class: 'edit-question-link'
-  p= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
+  p= link_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }
   .question-errors
-  = form_for @question, remote: true, html: { id: 'edit-question' } do |f|
+  = form_for question, remote: true, html: { id: 'edit-question' } do |f|
     = f.label :title
     = f.text_field :title
     = f.label :body

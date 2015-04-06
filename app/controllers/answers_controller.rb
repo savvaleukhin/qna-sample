@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include VotableController
+
   before_action :authenticate_user!
   before_action :load_question, only: [:create, :accept]
   before_action :load_answer, only: [:update, :destroy, :accept]
@@ -43,16 +45,6 @@ class AnswersController < ApplicationController
     @answer.accept
   end
 
-  def vote
-    @answer.vote(current_user, params[:value])
-    render 'vote'
-  end
-
-  def unvote
-    @answer.unvote(current_user)
-    render 'vote'
-  end
-
   private
 
   def load_question
@@ -60,7 +52,7 @@ class AnswersController < ApplicationController
   end
 
   def load_answer
-    @answer = Answer.find_by!(question_id: params[:question_id], id: params[:id])
+    @answer = Answer.find(params[:id])
   end
 
   def answer_params
@@ -80,9 +72,9 @@ class AnswersController < ApplicationController
   end
 
   def user_can_vote
-    @answer = Answer.find(params[:id])
+    @resource = Answer.find(params[:id])
 
-    if @answer.user_id == current_user.id
+    if @resource.user_id == current_user.id
       render text: 'You do not have permission to view this page.', status: 403
     end
   end

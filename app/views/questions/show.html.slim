@@ -1,5 +1,5 @@
 .question
-  = render 'question'
+  = render partial: 'question', object:  @question, as: 'question'
 
 .answers
   - if @question.answers.any?
