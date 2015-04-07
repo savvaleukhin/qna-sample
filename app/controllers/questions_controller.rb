@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  include VotableController
+  include Voted
 
   before_action :load_question, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]

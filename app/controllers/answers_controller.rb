@@ -1,12 +1,11 @@
 class AnswersController < ApplicationController
-  include VotableController
-
   before_action :authenticate_user!
   before_action :load_question, only: [:create, :accept]
   before_action :load_answer, only: [:update, :destroy, :accept]
   before_action :correct_user, only: [:update, :destroy]
   before_action :question_owner, only: :accept
-  before_action :user_can_vote, only: [:vote, :unvote]
+
+  include Voted
 
   def create
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
@@ -67,14 +66,6 @@ class AnswersController < ApplicationController
 
   def question_owner
     unless @question.user_id == current_user.id
-      render text: 'You do not have permission to view this page.', status: 403
-    end
-  end
-
-  def user_can_vote
-    @resource = Answer.find(params[:id])
-
-    if @resource.user_id == current_user.id
       render text: 'You do not have permission to view this page.', status: 403
     end
   end
