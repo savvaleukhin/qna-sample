@@ -19,7 +19,7 @@ module Voted
   private
 
   def load_voted
-    @resource = controller_path.classify.constantize.find(params[:id])
+    @resource = controller_name.classify.constantize.find(params[:id])
   end
 
   def user_can_vote

@@ -1,10 +1,9 @@
 class QuestionsController < ApplicationController
-  include Voted
-
   before_action :load_question, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
   before_action :correct_user, only: [:edit, :update, :destroy]
-  before_action :user_can_vote, only: [:vote, :unvote]
+
+  include Voted
 
   def index
     @questions = Question.all
@@ -60,14 +59,6 @@ class QuestionsController < ApplicationController
   def correct_user
     unless @question.user == current_user
       redirect_to root_path, notice: 'You do not have permission to view this page.'
-    end
-  end
-
-  def user_can_vote
-    @resource = Question.find(params[:id])
-
-    if @resource.user_id == current_user.id
-      render text: 'You do not have permission to view this page.', status: 403
     end
   end
 end
