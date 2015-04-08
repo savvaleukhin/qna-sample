@@ -9,32 +9,6 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     before { sign_in_user(user) }
 
-    context 'JS with valid attributes' do
-      it 'saves the new answer in the database' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.to change(Answer, :count).by(1)
-      end
-
-      it 'associates the new answer with the question' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer), format: :js }.to change(question.answers, :count).by(1)
-      end
-
-      it 're-renders create view' do
-        post :create, question_id: question, answer: attributes_for(:answer), format: :js
-        expect(response).to render_template :create
-      end
-    end
-
-    context 'JS with invalid attributes' do
-      it 'does not save new answer in the database' do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
-      end
-
-      it 're-renders create view' do
-        post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js
-        expect(response).to render_template :create
-      end
-    end
-
     context 'JSON with valid attributes' do
       it 'saves the new answer in the database' do
         expect { post :create, question_id: question, answer: attributes_for(:answer), format: :json }.to change(Answer, :count).by(1)
@@ -64,37 +38,6 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     before { sign_in_user(answer.user) }
-
-    context 'JS valid attributes' do
-      it 'assigns the requested answer to @answer' do
-        patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :js
-        expect(assigns(:answer)).to eq answer
-      end
-
-      it 'assigns the question for requested answer to @question' do
-        patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :js
-        expect(assigns(:question)).to eq answer.question
-      end
-
-      it 'changes answer attributes' do
-        patch :update, question_id: answer.question, id: answer, answer: { body: "New body of answer" }, format: :js
-        answer.reload
-        expect(answer.body).to eq "New body of answer"
-      end
-
-      it 'renders update tempate' do
-        patch :update, question_id: answer.question, id: answer, answer: attributes_for(:answer), format: :js
-        expect(response).to render_template :update
-      end
-    end
-
-    context 'JS invalid attributes' do
-      it 'does not change the answer in the database' do
-        patch :update, question_id: answer.question, id: answer, answer: { body: nil }, format: :js
-        answer.reload
-        expect(answer.body).to eq 'MyText'
-      end
-    end
 
     context 'JSON valid attributes' do
       it 'assigns the question for requested answer to @question' do

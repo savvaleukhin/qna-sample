@@ -10,28 +10,20 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
 
-    respond_to do |format|
-      if @answer.save
-        format.js
-        format.json
-      else
-        format.js
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-      end
+    if @answer.save
+      render :create
+    else
+      render json: @answer.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   def update
     @question = @answer.question
 
-    respond_to do |format|
-      if @answer.update(answer_params)
-        format.js
-        format.json
-      else
-        format.js
-        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
-      end
+    if @answer.update(answer_params)
+      render :update
+    else
+      render json: @answer.errors.full_messages, status: :unprocessable_entity
     end
   end
 
