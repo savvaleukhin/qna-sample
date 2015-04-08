@@ -12,19 +12,19 @@ module Votable
   end
 
   def unvote(user)
-    user.votes.where(votable: self).delete_all
+    votes.where(user: user).delete_all
   end
 
   def voted_by?(user)
-    user.votes.where(votable: self).any?
+    votes.exists?(user: user)
   end
 
   def total_votes
-    Vote.where(votable_id: id, votable_type: self.class.name).sum(:value)
+    votes.sum(:value)
   end
 
   def vote_by(user)
-    vote = Vote.find_by(votable_id: id, votable_type: self.class.name, user_id: user.id)
+    vote = votes.find_by(user: user)
     vote.value unless vote.nil?
   end
 end
