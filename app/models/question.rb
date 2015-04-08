@@ -3,7 +3,6 @@ class Question < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy
   has_many :attachments, as: :attachmentable, dependent: :destroy
-  has_many :votes, as: :votable, dependent: :destroy
   belongs_to :user
 
   validates :user_id, :title, :body, presence: true

@@ -1,6 +1,10 @@
 module Votable
   extend ActiveSupport::Concern
 
+  included do
+    has_many :votes, as: :votable, dependent: :destroy
+  end
+
   def vote(user, value)
     if self.voted_by?(user)
       Vote.transaction do
@@ -25,6 +29,7 @@ module Votable
   end
 
   def vote_by(user)
-    Vote.find_by(votable_id: self.id, votable_type: self.class.name).value
+    vote = Vote.find_by(votable_id: self.id, votable_type: self.class.name)
+    vote.value unless vote.nil?
   end
 end
