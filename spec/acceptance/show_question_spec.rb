@@ -1,9 +1,8 @@
 require_relative 'acceptance_helper'
 
-feature 'Show list of questions', %q{
+feature 'Show list of questions', '
   User be able to see list of asked questions
-} do
-
+' do
   title_1 = 'question test 1'
   title_2 = 'question test 2'
   given(:user) { create(:user) }
@@ -19,15 +18,18 @@ feature 'Show list of questions', %q{
   end
 end
 
-feature 'Show a question', %q{
+feature 'Show a question', '
   User be able to see asked question with answers
-} do
-
+' do
   given(:user) { create(:user) }
-  given(:question) { create(:question, title: 'question test', body: 'body of question test', user: user) }
+  given(:question) do
+    create(:question, title: 'question test',
+                      body: 'body of question test',
+                      user: user)
+  end
 
   scenario 'User sees a question and list of answers' do
-    question.answers.create!([{body: 'test 1', user: user}, {body: 'test 2', user: user}])
+    question.answers.create!([{ body: 'test 1', user: user }, { body: 'test 2', user: user }])
 
     visit question_path(question)
     expect(page).to have_content 'question test'

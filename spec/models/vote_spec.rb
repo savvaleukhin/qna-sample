@@ -23,14 +23,14 @@ RSpec.describe Vote, type: :model do
     it 'votes up' do
       vote = question.vote(user, 1)
 
-      expect(vote.value).to eq 1
+      expect(user.votes.find_by(votable: question).value).to eq 1
       expect(Vote.where(user_id: user, votable_id: question.id, votable_type: question.class.name).count).to eq 1
     end
 
     it 'votes down' do
       vote = question.vote(user, -1)
 
-      expect(vote.value).to eq -1
+      expect(user.votes.find_by(votable: question).value).to eq -1
       expect(Vote.where(user_id: user, votable_id: question.id, votable_type: question.class.name).count).to eq 1
     end
 
@@ -50,14 +50,14 @@ RSpec.describe Vote, type: :model do
     it 'votes up' do
       vote = answer.vote(user, 1)
 
-      expect(vote.value).to eq 1
+      expect(user.votes.find_by(votable: answer).value).to eq 1
       expect(Vote.where(user_id: user, votable_id: answer.id, votable_type: answer.class.name).count).to eq 1
     end
 
     it 'votes down' do
       vote = answer.vote(user, -1)
 
-      expect(vote.value).to eq -1
+      expect(user.votes.find_by(votable: answer).value).to eq -1
       expect(Vote.where(user_id: user, votable_id: answer.id, votable_type: answer.class.name).count).to eq 1
     end
 

@@ -6,13 +6,9 @@ module Votable
   end
 
   def vote(user, value)
-    Vote.transaction do
-      Vote.where(votable_id: id, votable_type: self.class.name, user_id: user.id).delete_all
-      Vote.create(votable_id: id,
-                  votable_type: self.class.name,
-                  user_id: user.id,
-                  value: value)
-    end
+    vote = votes.find_or_initialize_by(user: user)
+    vote.value = value
+    vote.save!
   end
 
   def unvote(user)
