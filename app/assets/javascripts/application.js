@@ -14,6 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery.remotipart
+//= require private_pub
 //= require jquery_nested_form
 //= require turbolinks
 //= require handlebars

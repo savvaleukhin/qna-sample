@@ -3,8 +3,8 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 newAnswerSuccess = (e, data, status, xhr) ->
-  answer = $.parseJSON(xhr.responseText)
-  $('.answers').append(HandlebarsTemplates['answers/create'](answer))
+  #answer = $.parseJSON(xhr.responseText)
+  #$('.answers').append(HandlebarsTemplates['answers/create'](answer))
 
 newAnswerError = (e, xhr, status, error) ->
   errors = $.parseJSON(xhr.responseText)
@@ -29,3 +29,9 @@ $(document).on 'ajax:error', 'form#new_answer', newAnswerError
 
 $(document).on 'ajax:success', 'form.edit_answer', editAnswerSuccess
 $(document).on 'ajax:error', 'form.edit_answer', editAnswerError
+
+$ ->
+  questionId = $('.answers').data('questionId');
+  channel = '/questions' + questionId + '/answers'
+  PrivatePub.subscribe channel, (data, channel) ->
+    console.log(data);

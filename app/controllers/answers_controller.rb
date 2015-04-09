@@ -11,7 +11,9 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params.merge({user_id: current_user.id}))
 
     if @answer.save
-      render :create
+      #render :create
+      PrivatePub.publish_to "/questions/#{@question.id}/answers",
+        answer: (render template: 'answers/create.json.jbuilder')
     else
       render json: @answer.errors.full_messages, status: :unprocessable_entity
     end

@@ -1,7 +1,7 @@
 .question
   = render partial: 'question', object:  @question, as: 'question'
 
-.answers
+.answers data={question_id: "#{@question.id}"}
   - if @question.answers.any?
     = render 'answers'
 
@@ -19,3 +19,5 @@
       = f.link_to_add 'New attachment', :attachments
 
     = f.submit 'Create'
+
+= subscribe_to "/questions/#{@question.id}/answers"
