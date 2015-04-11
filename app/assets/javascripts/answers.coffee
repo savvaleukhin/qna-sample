@@ -2,9 +2,12 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-#newAnswerSuccess = (e, data, status, xhr) ->
+newAnswerSuccess = (e, data, status, xhr) ->
   #answer = $.parseJSON(xhr.responseText)
   #$('.answers').append(HandlebarsTemplates['answers/create'](answer))
+  $('.new_answer').find("#answer_body").val('')
+  $('.new_answer #attachment').find("input").val('')
+  $(".new_answer #attachment .fields:not(:first)").remove()
 
 newAnswerError = (e, xhr, status, error) ->
   errors = $.parseJSON(xhr.responseText)
@@ -24,7 +27,7 @@ editAnswerError = (e, xhr, status, error) ->
   $.each errors, (index, value) ->
     $('.answer-errors').append(value)
 
-#$(document).on 'ajax:success', 'form#new_answer', newAnswerSuccess
+$(document).on 'ajax:success', 'form#new_answer', newAnswerSuccess
 $(document).on 'ajax:error', 'form#new_answer', newAnswerError
 
 $(document).on 'ajax:success', 'form.edit_answer', editAnswerSuccess
@@ -39,4 +42,4 @@ $ ->
     answer = $.parseJSON(data['answer'])
     $('.answers').append(HandlebarsTemplates['answers/create'](answer));
     if (author != answer.user_id)
-      $('.author').remove();
+      $('.author').remove()
