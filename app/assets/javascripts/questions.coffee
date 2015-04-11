@@ -15,3 +15,9 @@ editAnswerFunction = (e) ->
 
 $(document).on 'click', '.answers .edit-answer-link', editAnswerFunction
 $(document).on 'click', '.question .edit-question-link', editQuestionFunction
+
+$ ->
+  PrivatePub.subscribe "/questions", (data, channel) ->
+    question = $.parseJSON(data['question'])
+    console.log(question)
+    $('.questions').append(HandlebarsTemplates['questions/create'](question))

@@ -27,6 +27,7 @@ class QuestionsController < ApplicationController
 
     if @question.save
       redirect_to @question, notice: 'Your question successfully created.'
+      PrivatePub.publish_to "/questions", question: @question.to_json
     else
       render :new
     end

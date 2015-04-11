@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-newAnswerSuccess = (e, data, status, xhr) ->
+newAnswerSuccess = (e) ->
   #answer = $.parseJSON(xhr.responseText)
   #$('.answers').append(HandlebarsTemplates['answers/create'](answer))
   $('.new_answer').find("#answer_body").val('')
