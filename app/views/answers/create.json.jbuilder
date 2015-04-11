@@ -1,4 +1,4 @@
-json.(@answer, :id, :body, :question_id)
+json.(@answer, :id, :body, :question_id, :user_id)
 
 json.attachments @answer.attachments do |attachment|
   json.id attachment.id

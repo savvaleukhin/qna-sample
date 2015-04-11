@@ -1,3 +1,5 @@
+.authentication-data data={signed_in: "#{user_signed_in?}", user_id: "#{current_user.id if user_signed_in?}"}
+
 - if user_signed_in?
   = link_to 'Log out', destroy_user_session_path, :method => :delete
 - else

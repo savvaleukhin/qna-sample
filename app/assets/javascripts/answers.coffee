@@ -31,9 +31,12 @@ $(document).on 'ajax:success', 'form.edit_answer', editAnswerSuccess
 $(document).on 'ajax:error', 'form.edit_answer', editAnswerError
 
 $ ->
-  questionId = $('.answers').data('questionId');
-  channel = '/questions/' + questionId + '/answers';
+  questionId = $('.answers').data('questionId')
+  channel = '/questions/' + questionId + '/answers'
+  author = $('.authentication-data').data("userId")
+
   PrivatePub.subscribe channel, (data, channel) ->
-    console.log(data);
     answer = $.parseJSON(data['answer'])
-    $('.answers').append(HandlebarsTemplates['answers/create'](answer))
+    $('.answers').append(HandlebarsTemplates['answers/create'](answer));
+    if (author != answer.user_id)
+      $('.author').remove();
