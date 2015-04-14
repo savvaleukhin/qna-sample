@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users
 
+#  concern :commentable do
+#    resources :comments, only: [:create, :update, :destroy]
+#  end
+
   resources :questions do
+ #   concerns :commentable
+    resources :comments, module: :questions, only: [:create, :destroy]
+
     member do
       post :vote
       post :unvote
@@ -14,6 +21,10 @@ Rails.application.routes.draw do
         post :unvote
       end
     end
+  end
+
+  resources :answers, only: [] do
+    resources :comments, module: :answers, only: [:create, :destroy]
   end
 
   resources :attachments, only: :destroy

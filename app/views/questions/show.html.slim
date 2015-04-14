@@ -1,5 +1,8 @@
 .question
   = render partial: 'question', object:  @question, as: 'question'
+  = render partial: 'comments/comments', object: @question, as: 'commentable'
+
+  = render partial: 'comments/form', object: @question, as: 'commentable'
 
 .answers data={question_id: "#{@question.id}"}
   - if @question.answers.any?

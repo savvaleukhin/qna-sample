@@ -27,3 +27,7 @@
         = f.label :body, 'Answer'
         = f.text_area :body
         = f.submit 'Save'
+
+      - if user_signed_in?
+        = render partial: 'comments/comments', object: answer, as: 'commentable'
+        = render partial: 'comments/form', object: answer, as: 'commentable'
