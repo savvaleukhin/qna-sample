@@ -5,8 +5,12 @@ class CommentsController < ApplicationController
   def create
     @comment = @commentable.comments.new(comments_params)
     @comment.user = current_user
-    @comment.save
-    redirect_to(:back)
+
+    if @comment.save
+      render json: @comment
+    else
+      render json: @comment.errors.full_messages, status: 422
+    end
   end
 
   private
