@@ -1,7 +1,7 @@
-- if commentable.comments.any?
-  div id='comments-#{commentable.id}' class='comments'
-    table
-      tbody
+div id='comments-#{commentable.class.name.downcase}-#{commentable.id}' class='comments'
+  table
+    tbody
+      - if commentable.comments.any?
         - commentable.comments.each do |comment|
           tr id='comment-#{comment.id}'
             td= comment.body
