@@ -5,6 +5,7 @@
 newCommentSuccess = (e, data, status, xhr) ->
   comment = $.parseJSON(xhr.responseText)
   commentableId = comment.commentable_id
-  $('#comments-'+ commentableId).find('tbody').append(HandlebarsTemplates['comments/create'](comment));
+  commentableType = comment.commentable_type.toLowerCase()
+  $('#comments-' + commentableType + '-' + commentableId).find('tbody').append(HandlebarsTemplates['comments/create'](comment));
 
 $(document).on 'ajax:success', 'form#new_comment', newCommentSuccess
