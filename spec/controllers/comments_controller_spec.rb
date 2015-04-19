@@ -11,7 +11,7 @@ RSpec.describe CommentsController, type: :controller do
       context 'Valid attributes' do
         before { sign_in_user(user) }
 
-        subject do
+        let(:post_comment) do
           post :create,
             commentable: 'questions',
             question_id: question,
@@ -20,15 +20,15 @@ RSpec.describe CommentsController, type: :controller do
         end
 
         it 'saves a new comment in the database' do
-          expect { subject }.to change(Comment, :count).by(1)
+          expect { post_comment }.to change(Comment, :count).by(1)
         end
 
         it 'associates the new comment with the question' do
-          expect { subject }.to change(question.comments, :count).by(1)
+          expect { post_comment }.to change(question.comments, :count).by(1)
         end
 
         it 'response' do
-          subject
+          post_comment
           expect(response.status).to eq 200
         end
       end
@@ -36,7 +36,7 @@ RSpec.describe CommentsController, type: :controller do
       context 'Invalid attributes' do
         before { sign_in_user(user) }
 
-        subject do
+        let(:post_comment) do
           post :create,
             commentable: 'questions',
             question_id: question,
@@ -45,11 +45,11 @@ RSpec.describe CommentsController, type: :controller do
         end
 
         it 'does not save a new comment in the database' do
-          expect { subject }.to_not change(Comment, :count)
+          expect { post_comment }.to_not change(Comment, :count)
         end
 
         it 'unprocessable entity' do
-          subject
+          post_comment
           expect(response.status).to eq 422
         end
       end
@@ -71,7 +71,7 @@ RSpec.describe CommentsController, type: :controller do
       context 'Valid attributes' do
         before { sign_in_user(user) }
 
-        subject do
+        let(:post_comment) do
           post :create,
             commentable: 'answers',
             answer_id: answer,
@@ -80,15 +80,15 @@ RSpec.describe CommentsController, type: :controller do
         end
 
         it 'saves a new comment in the database' do
-          expect { subject }.to change(Comment, :count).by(1)
+          expect { post_comment }.to change(Comment, :count).by(1)
         end
 
         it 'associates the new comment with the answer' do
-          expect { subject }.to change(answer.comments, :count).by(1)
+          expect { post_comment }.to change(answer.comments, :count).by(1)
         end
 
         it 'response' do
-          subject
+          post_comment
           expect(response.status).to eq 200
         end
       end
@@ -96,7 +96,7 @@ RSpec.describe CommentsController, type: :controller do
       context 'Invalid attributes' do
         before { sign_in_user(user) }
 
-        subject do
+        let(:post_comment) do
           post :create,
             commentable: 'answers',
             answer_id: answer,
@@ -105,11 +105,11 @@ RSpec.describe CommentsController, type: :controller do
         end
 
         it 'does not save a new comment in the database' do
-          expect { subject }.to_not change(Comment, :count)
+          expect { post_comment }.to_not change(Comment, :count)
         end
 
         it 'unprocessable entity' do
-          subject
+          post_comment
           expect(response.status).to eq 422
         end
       end
@@ -117,9 +117,12 @@ RSpec.describe CommentsController, type: :controller do
       context 'Non authenticated user' do
         it 'does not save a new comment in the database' do
           expect do
-            post :create, commentable: 'answers', answer_id: answer,
-            comment: attributes_for(:comment), format: :json
-          end .to_not change(Comment, :count)
+            post :create,
+              commentable: 'answers',
+              answer_id: answer,
+              comment: attributes_for(:comment),
+              format: :json
+          end.to_not change(Comment, :count)
         end
       end
     end
