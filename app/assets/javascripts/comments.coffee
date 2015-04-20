@@ -8,6 +8,7 @@ newCommentSuccess = (e, data, status, xhr) ->
   commentableType = comment.commentable_type.toLowerCase()
   $('#comments-' + commentableType + '-' + commentableId).find('tbody').append(HandlebarsTemplates['comments/create'](comment));
   $(this).hide()
+  $('.new_comment').find("#comment_body").val('')
   $('.add-comment-link').show()
 
 newCommentError = (e, xhr, status, error) ->
