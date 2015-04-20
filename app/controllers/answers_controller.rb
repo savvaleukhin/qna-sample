@@ -36,6 +36,7 @@ class AnswersController < ApplicationController
 
   def accept
     @answer.accept
+    @answers = @question.answers.includes(:comments, :attachments)
   end
 
   private

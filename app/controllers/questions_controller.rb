@@ -12,6 +12,8 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.attachments.build
+
+    @answers = @question.answers.includes(:comments, :attachments)
   end
 
   def new

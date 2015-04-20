@@ -1,4 +1,4 @@
-- @question.answers.by_top.each do |answer|
+- @answers.by_top.each do |answer|
   - if answer.persisted?
 
     div id="answer-#{answer.id}" class=(answer.accepted == true ? "accepted-answer answer" : "answer")

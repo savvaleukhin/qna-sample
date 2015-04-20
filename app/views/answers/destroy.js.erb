@@ -1,1 +1,1 @@
-$('.answers').html('<%= j render 'questions/answers' %>');
+$('.answers').find('#answer-<%= @answer.id %>').remove();

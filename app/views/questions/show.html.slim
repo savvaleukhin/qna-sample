@@ -2,7 +2,7 @@
   = render partial: 'question', object:  @question, as: 'question'
 
 .answers data={question_id: "#{@question.id}"}
-  - if @question.answers.any?
+  - if @answers.any?
     = render 'answers'
 
 - if user_signed_in?
