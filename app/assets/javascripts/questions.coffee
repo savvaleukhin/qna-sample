@@ -13,11 +13,11 @@ editAnswerFunction = (e) ->
   answer_id = $(this).data('answerId');
   $('form#edit-answer-' + answer_id).show();
 
-$(document).on 'click', '.answers .edit-answer-link', editAnswerFunction
-$(document).on 'click', '.question .edit-question-link', editQuestionFunction
-
-$ ->
+subscribeToQuestions = (e) ->
   PrivatePub.subscribe "/questions", (data, channel) ->
     question = $.parseJSON(data['question'])
-    console.log(question)
     $('.questions').append(HandlebarsTemplates['questions/create'](question))
+
+$(document).on 'click', '.answers .edit-answer-link', editAnswerFunction
+$(document).on 'click', '.question .edit-question-link', editQuestionFunction
+$(document).ready subscribeToQuestions

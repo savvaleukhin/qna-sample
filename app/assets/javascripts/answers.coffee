@@ -27,13 +27,7 @@ editAnswerError = (e, xhr, status, error) ->
   $.each errors, (index, value) ->
     $('.answer-errors').append(value)
 
-$(document).on 'ajax:success', 'form#new_answer', newAnswerSuccess
-$(document).on 'ajax:error', 'form#new_answer', newAnswerError
-
-$(document).on 'ajax:success', 'form.edit_answer', editAnswerSuccess
-$(document).on 'ajax:error', 'form.edit_answer', editAnswerError
-
-$ ->
+subscribeToAnswers = (e) ->
   questionId = $('.answers').data('questionId')
   channel = '/questions/' + questionId + '/answers'
   author = $('.authentication-data').data("userId")
@@ -43,3 +37,11 @@ $ ->
     $('.answers').append(HandlebarsTemplates['answers/create'](answer));
     if (author != answer.user_id)
       $('.author').remove()
+
+$(document).on 'ajax:success', 'form#new_answer', newAnswerSuccess
+$(document).on 'ajax:error', 'form#new_answer', newAnswerError
+
+$(document).on 'ajax:success', 'form.edit_answer', editAnswerSuccess
+$(document).on 'ajax:error', 'form.edit_answer', editAnswerError
+
+$(document).ready subscribeToAnswers
