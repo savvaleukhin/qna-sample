@@ -7,6 +7,9 @@ class CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
+      PrivatePub.publish_to "/questions/#{@commentable.try(:question).try(:id) || @commentable.id }/comments",
+        comment: @comment.to_json
+
       render json: @comment
     else
       render json: @comment.errors.full_messages, status: 422
