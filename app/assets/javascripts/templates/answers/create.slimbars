@@ -22,3 +22,15 @@ div id="answer-{{id}}" class="answer"
     label for="answer_body" Answer
     textarea id="answer_body" name="answer[body]" {{body}}
     input type="submit" value="Save" name="commit"
+
+  div id='comments-answer-{{id}}' class='comments'
+    table
+      tbody
+
+  p: a class="add-comment-link" href="" data-commentable-name="answer" data-commentable-id="{{id}}" add comment
+
+  form id="add-comment-answer-{{id}}" class="new_comment" method="post" data-remote="true" accept-charset="UTF-8" action="/answers/{{id}}/comments" data-type="json"
+    input type="hidden" value="✓" name="utf8"
+    label for="comment_comment" Comment
+    textarea id="comment_body" name="comment[body]"
+    input type="submit" value="Add" name="commit"

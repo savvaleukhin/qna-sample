@@ -1,20 +1,21 @@
 require_relative 'acceptance_helper'
 
-feature 'Create comment for question', %q{
-  User be able to add comment to question.
+feature 'Create comment for an answer', %q{
+  User be able to add comment to answer.
 } do
 
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
+  given(:answer) { create(:answer, question: question, user: user) }
 
   context 'Authenticated user' do
     before do
       sign_in(user)
-      visit question_path(question)
+      visit question_path(answer.question)
     end
 
     scenario 'Creates comment', js: true, data: { type: :json } do
-      within '.question' do
+      within '.answers' do
         click_on 'add comment'
         fill_in 'comment_body', with: 'My comment'
         click_on 'Add'
@@ -24,7 +25,7 @@ feature 'Create comment for question', %q{
     end
 
     scenario 'Tries to create invalid comment', js: true, data: { type: :json } do
-      within '.question' do
+      within '.answers' do
         click_on 'add comment'
         fill_in 'comment_body', with: nil
         click_on 'Add'

@@ -1,4 +1,9 @@
-= form_for [commentable, Comment.new], remote: true, data: { type: :json } do |f|
+p= link_to 'add comment', '', class: 'add-comment-link',
+    data: { commentable_id: commentable.id, commentable_name: commentable.class.name.downcase }
+
+= form_for [commentable, Comment.new],
+    html: { id: "add-comment-#{commentable.class.name.downcase}-#{commentable.id}" },
+    remote: true, data: { type: :json } do |f|
   = f.label :comment
   = f.text_area :body
   = f.submit 'Add'
