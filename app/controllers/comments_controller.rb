@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
 
     if @comment.save
       PrivatePub.publish_to commentable_channel, comment: @comment.to_json
-      render json: nil, status: :ok
+      head :no_content
     else
       render json: @comment.errors.full_messages, status: 422
     end
