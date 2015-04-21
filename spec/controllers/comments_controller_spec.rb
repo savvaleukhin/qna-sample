@@ -29,7 +29,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response' do
           post_comment
-          expect(response.status).to eq 200
+          expect(response.status).to eq 204
         end
       end
 
@@ -89,7 +89,7 @@ RSpec.describe CommentsController, type: :controller do
 
         it 'response' do
           post_comment
-          expect(response.status).to eq 200
+          expect(response.status).to eq 204
         end
       end
 
