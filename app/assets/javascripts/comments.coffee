@@ -2,11 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-newCommentSuccess = (e, data, status, xhr) ->
-  comment = $.parseJSON(xhr.responseText)
-  commentableId = comment.commentable_id
-  commentableType = comment.commentable_type.toLowerCase()
-  $('#comments-' + commentableType + '-' + commentableId).find('tbody').append(HandlebarsTemplates['comments/create'](comment));
+newCommentSuccess = (e) ->
   $(this).hide()
   $('.new_comment').find("#comment_body").val('')
   $('.add-comment-link').show()
@@ -27,16 +23,13 @@ addCommentFunction = (e) ->
 subscribeToComments = (e) ->
   questionId = $('.answers').data('questionId')
   channel = '/questions/' + questionId + '/comments'
-  author = $('.authentication-data').data("userId")
 
   PrivatePub.subscribe channel, (data, channel) ->
     comment = $.parseJSON(data['comment'])
-
-    if (author != comment.user_id)
-      commentableId = comment.commentable_id
-      commentableType = comment.commentable_type.toLowerCase()
-      selector = '#comments-' + commentableType + '-' + commentableId
-      $(selector).find('tbody').append(HandlebarsTemplates['comments/create'](comment))
+    commentableId = comment.commentable_id
+    commentableType = comment.commentable_type.toLowerCase()
+    selector = '#comments-' + commentableType + '-' + commentableId
+    $(selector).find('tbody').append(HandlebarsTemplates['comments/create'](comment))
 
 $(document).on 'ajax:success', 'form.new_comment', newCommentSuccess
 $(document).on 'ajax:error', 'form.new_comment', newCommentError
