@@ -10,10 +10,10 @@ newAnswerSuccess = (e) ->
   $(".new_answer #attachment .fields:not(:first)").remove()
 
 newAnswerError = (e, xhr, status, error) ->
-  errors = $.parseJSON(xhr.responseText)
+  errors = $.parseJSON(xhr.responseText).errors
   $('.answer-errors').html('')
   $.each errors, (index, value) ->
-    $('.answer-errors').append(value)
+    $('.answer-errors').append("#{index} #{value}")
 
 editAnswerSuccess = (e, data, status, xhr) ->
   answer = $.parseJSON(xhr.responseText)
@@ -22,10 +22,10 @@ editAnswerSuccess = (e, data, status, xhr) ->
   $('.edit-answer-link').show()
 
 editAnswerError = (e, xhr, status, error) ->
-  errors = $.parseJSON(xhr.responseText)
+  errors = $.parseJSON(xhr.responseText).errors
   $('.answer-errors').html('')
   $.each errors, (index, value) ->
-    $('.answer-errors').append(value)
+    $('.answer-errors').append("#{index} #{value}")
 
 subscribeToAnswers = (e) ->
   questionId = $('.answers').data('questionId')
