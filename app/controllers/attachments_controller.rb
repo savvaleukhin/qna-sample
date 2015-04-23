@@ -3,8 +3,10 @@ class AttachmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :correct_user
 
+  respond_to :js
+
   def destroy
-    @attachment.destroy
+    respond_with(@attachment.destroy)
   end
 
   private
@@ -14,8 +16,7 @@ class AttachmentsController < ApplicationController
   end
 
   def correct_user
-    unless @attachment.attachmentable.user_id == current_user.id
-      render text: 'You do not have permission to view this page.', status: :forbidden
-    end
+    return if @attachment.attachmentable.user_id == current_user.id
+    render text: 'You do not have permission to view this page.', status: :forbidden
   end
 end
