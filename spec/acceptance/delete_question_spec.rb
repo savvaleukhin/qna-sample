@@ -29,7 +29,7 @@ feature 'Delete a question', %q{
 
     expect(page).to_not have_content 'MyString'
     expect(page).to_not have_content 'MyText'
-    expect(page).to have_content 'Your question was successfully deleted.'
+    expect(page).to have_content 'Question was successfully destroyed.'
     expect(current_path).to eq questions_path
   end
 

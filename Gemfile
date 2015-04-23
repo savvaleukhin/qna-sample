@@ -41,6 +41,7 @@ gem "nested_form"
 gem 'handlebars_assets'
 gem "private_pub"
 gem "thin"
+gem 'responders', '~> 2.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -62,4 +63,8 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
+end
+
+group :development do
+  gem 'rubocop', require: false
 end
