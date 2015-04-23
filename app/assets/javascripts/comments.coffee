@@ -8,10 +8,10 @@ newCommentSuccess = (e) ->
   $('.add-comment-link').show()
 
 newCommentError = (e, xhr, status, error) ->
-  errors = $.parseJSON(xhr.responseText)
+  errors = $.parseJSON(xhr.responseText).errors
   $('.alert').html('')
   $.each errors, (index, value) ->
-    $('.alert').append(value)
+    $('.alert').append("#{index} #{value}")
 
 addCommentFunction = (e) ->
   e.preventDefault();

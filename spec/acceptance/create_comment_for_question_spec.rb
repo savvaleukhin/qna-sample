@@ -1,9 +1,8 @@
 require_relative 'acceptance_helper'
 
-feature 'Create comment for question', %q{
-  User be able to add comment to question.
-} do
-
+feature(
+  'Create comment for question',
+  'User be able to add comment to question.') do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
@@ -30,7 +29,7 @@ feature 'Create comment for question', %q{
         click_on 'Add'
       end
 
-      expect(page).to have_content "Body can't be blank"
+      expect(page).to have_content "body can't be blank"
     end
   end
 

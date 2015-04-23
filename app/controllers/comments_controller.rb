@@ -2,15 +2,16 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_commentable
 
-  def create
-    @comment = @commentable.comments.new(comments_params)
-    @comment.user = current_user
+  respond_to :json
 
-    if @comment.save
-      PrivatePub.publish_to commentable_channel, comment: @comment.to_json
-      head :no_content
-    else
-      render json: @comment.errors.full_messages, status: 422
+  def create
+    @comment = @commentable.comments.create(comments_params.merge(user_id: current_user.id))
+
+    respond_with @comment do |format|
+      format.json do
+        PrivatePub.publish_to commentable_channel, comment: @comment.to_json
+        head :no_content
+      end if @comment.errors.empty?
     end
   end
 
