@@ -47,6 +47,11 @@ class QuestionsController < ApplicationController
 
   def destroy
     respond_with(@question.destroy)
+    # do |format|
+      #format.js do
+       # PrivatePub.publish_to '/questions', question: @question
+      #end
+    #end
   end
 
   private

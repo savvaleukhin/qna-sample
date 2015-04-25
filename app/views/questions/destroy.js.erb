@@ -1,1 +1,3 @@
-$('.questions').find('#question-<%= @question.id %>').remove();
+<% publish_to '/questions' do %>
+  $('.questions').find('#question-<%= @question.id %>').remove();
+<% end %>
