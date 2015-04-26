@@ -1,4 +1,4 @@
-h2= question.title
+div id='question_title': h2= question.title
 
 .question_votes
   h4= question.total_votes
@@ -12,7 +12,7 @@ h2= question.title
     p= link_to "up", vote_question_path(question, value: 1), remote: true, method: "post"
     p= link_to "down", vote_question_path(question, value: -1), remote: true, method: "post"
 
-p= question.body
+div id='question_body': p= question.body
 
 - if question.attachments.any?
   .attachments

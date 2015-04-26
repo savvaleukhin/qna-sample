@@ -3,5 +3,15 @@
     $('.question-errors').html('<%= j message %>')
   <% end %>
 <% else %>
-  $('.question').html('<%= j render partial: 'question', object:  @question %>');
+  $('#edit-question').hide();
+  $('.edit-question-link').show();
+
+  <% publish_to "/questions/#{@question.id}" do %>
+    $('.question').find('#question_title h2').html('<%= j @question.title %>');
+    $('.question').find('#question_body p').html('<%= j @question.body %>');
+  <% end %>
+
+  <% publish_to '/questions' do %>
+    $('#question-<%= @question.id %> p:first-child').find('a').html('<%= j @question.title %>');
+  <% end %>
 <% end %>
