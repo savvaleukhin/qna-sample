@@ -7,6 +7,9 @@ feature 'Delete a question', %q{
   given(:question_with_user) { create(:question_with_user) }
   given(:user_non_owner) { create(:user) }
 
+  given(:author) { create(:user) }
+  given(:question) { create(:question, user: author, title: 'Question Comet') }
+
   scenario 'Non-authenticated user tries to delete a question' do
     visit question_path(question_with_user)
     expect(page).to_not have_link 'Delete'
@@ -34,14 +37,14 @@ feature 'Delete a question', %q{
   end
 
   scenario 'Authenticated user (owner) delete a question using AJAX', js: true do
-    sign_in(question_with_user.user)
+    sign_in(question.user)
     visit questions_path
 
     within '.questions' do
       click_on 'Delete'
     end
 
-    expect(page).to_not have_content 'MyString'
+    expect(page).to_not have_content 'Question Comet'
     expect(current_path).to eq questions_path
   end
 end
