@@ -7,7 +7,8 @@ class AnswersController < ApplicationController
 
   include Voted
 
-  respond_to :js, :json
+  respond_to :js
+  respond_to :json, only: [:create, :update]
 
   def create
     @answer = @question.answers.create(answer_params.merge(user_id: current_user.id))
@@ -15,8 +16,9 @@ class AnswersController < ApplicationController
     respond_with @answer do |format|
       format.json do
         PrivatePub.publish_to(
-          answers_channel,
-          answer: (render template: 'answers/create.json.jbuilder')
+          answers_channel(@question.id),
+          answer: (render template: 'answers/create.json.jbuilder'),
+          method: 'POST'
         )
       end if @answer.errors.empty?
     end
@@ -24,7 +26,15 @@ class AnswersController < ApplicationController
 
   def update
     @answer.update(answer_params)
-    respond_with(@answer)
+    respond_with @answer do |format|
+      format.json do
+        PrivatePub.publish_to(
+          answers_channel(@answer.question_id),
+          answer: (render template: 'answers/update.json.jbuilder'),
+          method: 'PATCH'
+        )
+      end if @answer.errors.empty?
+    end
   end
 
   def destroy
@@ -57,8 +67,8 @@ class AnswersController < ApplicationController
     render text: 'You do not have permission to view this page.', status: 403
   end
 
-  def answers_channel
-    "/questions/#{@question.id}/answers"
+  def answers_channel(question_id)
+    "/questions/#{question_id}/answers"
   end
 
   def answer_params

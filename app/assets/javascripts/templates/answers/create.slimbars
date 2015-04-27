@@ -1,5 +1,5 @@
 div id="answer-{{id}}" class="answer"
-  p
+  p class="answer_body"
     | {{body}}
 
   | {{#if attachments}}

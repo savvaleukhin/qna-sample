@@ -1,1 +1,3 @@
-$('.answers').find('#answer-<%= @answer.id %>').remove();
+<% publish_to "/questions/#{@answer.question_id}/answers" do %>
+  $('.answers').find('#answer-<%= @answer.id %>').remove();
+<% end %>

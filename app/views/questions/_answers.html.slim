@@ -2,7 +2,8 @@
   - if answer.persisted?
 
     div id="answer-#{answer.id}" class=(answer.accepted == true ? "accepted-answer answer" : "answer")
-      p= answer.body
+      p class="answer_body"
+        = answer.body
 
       div id='answer-#{answer.id}-votes'
         = render partial: 'questions/votes', object:  answer, as: 'answer'
