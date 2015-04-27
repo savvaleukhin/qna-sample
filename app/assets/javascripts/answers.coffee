@@ -37,8 +37,6 @@ subscribeToAnswers = (e) ->
         $('.answers').append(HandlebarsTemplates['answers/create'](answer))
       when "PATCH"
         $('#answer-' + answer.id).find(".answer_body").html(answer.body)
-      when "DELTE"
-        console.log(method)
 
     if (currentUser != answer.user_id)
       $('#answer-' + answer.id).find('.author').remove()
