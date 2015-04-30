@@ -15,7 +15,7 @@ editAnswerFunction = (e) ->
 
 subscribeToQuestions = (e) ->
   PrivatePub.subscribe "/questions", (data, channel) ->
-    if (typeof data != 'undefined')
+    if (typeof data != 'undefined') and (data['question'])
       question = $.parseJSON(data['question'])
       $('.questions').append(HandlebarsTemplates['questions/create'](question))
 

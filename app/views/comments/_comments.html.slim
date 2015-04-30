@@ -1,6 +1,17 @@
 div id='comments-#{commentable.class.name.downcase}-#{commentable.id}' class='comments'
-  table
-    tbody
-      - commentable.comments.each do |comment|
-        tr id='comment-#{comment.id}'
-          td= comment.body
+  - commentable.comments.each do |comment|
+    div id='comment-#{comment.id}'
+      p[class='comment_body'] = comment.body
+
+      - if user_signed_in? && current_user.id == comment.user_id
+        p= link_to 'Edit', '', class: 'edit-comment-link',
+            data: { comment_id: comment.id }
+        p= link_to 'Delete', [commentable, comment],
+              remote: true, method: :delete, data: { type: :json }
+
+        = form_for [commentable, comment],
+            html: { id: "edit-comment-#{comment.id}" },
+            remote: true, data: { type: :json } do |f|
+          = f.label :comment
+          = f.text_area :body
+          = f.submit 'Save'

@@ -24,8 +24,6 @@ div id="answer-{{id}}" class="answer"
     input type="submit" value="Save" name="commit"
 
   div id='comments-answer-{{id}}' class='comments'
-    table
-      tbody
 
   p: a class="add-comment-link" href="" data-commentable-name="answer" data-commentable-id="{{id}}" add comment
 
