@@ -29,17 +29,18 @@ subscribeToAnswers = (e) ->
   currentUser = $('.authentication-data').data("userId")
 
   PrivatePub.subscribe channel, (data, channel) ->
-    answer = $.parseJSON(data['answer'])
-    method = data['method']
+    if (typeof data != 'undefined')
+      answer = $.parseJSON(data['answer'])
+      method = data['method']
 
-    switch method
-      when "POST"
-        $('.answers').append(HandlebarsTemplates['answers/create'](answer))
-      when "PATCH"
-        $('#answer-' + answer.id).find(".answer_body").html(answer.body)
+      switch method
+        when "POST"
+          $('.answers').append(HandlebarsTemplates['answers/create'](answer))
+        when "PATCH"
+          $('#answer-' + answer.id).find(".answer_body").html(answer.body)
 
-    if (currentUser != answer.user_id)
-      $('#answer-' + answer.id).find('.author').remove()
+      if (currentUser != answer.user_id)
+        $('#answer-' + answer.id).find('.author').remove()
 
 $(document).on 'ajax:success', 'form#new_answer', newAnswerSuccess
 $(document).on 'ajax:error', 'form#new_answer', newAnswerError
