@@ -1,1 +1,1 @@
-json.(@answer, :id, :body)
+json.(@answer, :id, :body, :user_id)

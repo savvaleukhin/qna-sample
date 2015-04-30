@@ -29,7 +29,7 @@ subscribeToAnswers = (e) ->
   currentUser = $('.authentication-data').data("userId")
 
   PrivatePub.subscribe channel, (data, channel) ->
-    if (typeof data != 'undefined')
+    if (typeof data != 'undefined') and (data['answer'])
       answer = $.parseJSON(data['answer'])
       method = data['method']
 
