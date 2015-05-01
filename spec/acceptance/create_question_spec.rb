@@ -17,7 +17,7 @@ feature 'Create question', %q{
     fill_in 'Body', with: 'test text'
     click_on 'Save'
 
-    expect(page).to have_content 'Your question successfully created.'
+    expect(page).to have_content 'Question was successfully created.'
     expect(page).to have_content 'My new question'
   end
 

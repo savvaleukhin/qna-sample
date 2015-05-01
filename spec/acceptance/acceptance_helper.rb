@@ -1,9 +1,10 @@
-require'rails_helper'
+require 'rails_helper'
+require 'capybara/poltergeist'
 
 RSpec.configure do |config|
-  Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :poltergeist
 
-  config.include AcceptanceHelper, type: :feature
+  config.include FeatureHelper, type: :feature
 
   config.use_transactional_fixtures = false
 

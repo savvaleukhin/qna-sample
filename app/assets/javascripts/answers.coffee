@@ -3,40 +3,44 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 newAnswerSuccess = (e) ->
-  #answer = $.parseJSON(xhr.responseText)
-  #$('.answers').append(HandlebarsTemplates['answers/create'](answer))
   $('.new_answer').find("#answer_body").val('')
   $('.new_answer #attachment').find("input").val('')
   $(".new_answer #attachment .fields:not(:first)").remove()
 
 newAnswerError = (e, xhr, status, error) ->
-  errors = $.parseJSON(xhr.responseText)
+  errors = $.parseJSON(xhr.responseText).errors
   $('.answer-errors').html('')
   $.each errors, (index, value) ->
-    $('.answer-errors').append(value)
+    $('.answer-errors').append("#{index} #{value}")
 
-editAnswerSuccess = (e, data, status, xhr) ->
-  answer = $.parseJSON(xhr.responseText)
+editAnswerSuccess = (e) ->
   $(this).hide()
-  $('#answer-' + answer.id).find("p:first-child").html(answer.body)
   $('.edit-answer-link').show()
 
 editAnswerError = (e, xhr, status, error) ->
-  errors = $.parseJSON(xhr.responseText)
+  errors = $.parseJSON(xhr.responseText).errors
   $('.answer-errors').html('')
   $.each errors, (index, value) ->
-    $('.answer-errors').append(value)
+    $('.answer-errors').append("#{index} #{value}")
 
 subscribeToAnswers = (e) ->
   questionId = $('.answers').data('questionId')
   channel = '/questions/' + questionId + '/answers'
-  author = $('.authentication-data').data("userId")
+  currentUser = $('.authentication-data').data("userId")
 
   PrivatePub.subscribe channel, (data, channel) ->
-    answer = $.parseJSON(data['answer'])
-    $('.answers').append(HandlebarsTemplates['answers/create'](answer));
-    if (author != answer.user_id)
-      $('.author').remove()
+    if (typeof data != 'undefined') and (data['answer'])
+      answer = $.parseJSON(data['answer'])
+      method = data['method']
+
+      switch method
+        when "POST"
+          $('.answers').append(HandlebarsTemplates['answers/create'](answer))
+        when "PATCH"
+          $('#answer-' + answer.id).find(".answer_body").html(answer.body)
+
+      if (currentUser != answer.user_id)
+        $('#answer-' + answer.id).find('.author').remove()
 
 $(document).on 'ajax:success', 'form#new_answer', newAnswerSuccess
 $(document).on 'ajax:error', 'form#new_answer', newAnswerError

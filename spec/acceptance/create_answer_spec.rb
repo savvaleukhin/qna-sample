@@ -35,6 +35,6 @@ feature 'Create answer', %q{
     visit question_path(question)
     click_on 'Create'
 
-    expect(page).to have_content "Body can't be blank"
+    expect(page).to have_content "body can't be blank"
   end
 end

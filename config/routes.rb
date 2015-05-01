@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :questions do
-    resources :comments, defaults: { commentable: 'questions' }, only: :create
+    resources :comments, defaults: { commentable: 'questions' }, only: [:create, :update, :destroy]
 
     member do
       post :vote
@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   end
 
   resources :answers, only: [] do
-    resources :comments, defaults: { commentable: 'answers' }, only: :create
+    resources :comments, defaults: { commentable: 'answers' }, only: [:create, :update, :destroy]
   end
 
   resources :attachments, only: :destroy
