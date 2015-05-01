@@ -45,6 +45,8 @@ gem 'puma'
 gem 'responders', '~> 2.0'
 gem 'bootstrap-sass', '~> 3.3.4'
 gem 'autoprefixer-rails'
+gem 'omniauth'
+gem 'omniauth-facebook'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
