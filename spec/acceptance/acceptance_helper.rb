@@ -1,8 +1,8 @@
-require'rails_helper'
+require 'rails_helper'
+require 'capybara/poltergeist'
 
 RSpec.configure do |config|
-  Capybara.javascript_driver = :webkit
-  Capybara.default_wait_time = 10
+  Capybara.javascript_driver = :poltergeist
 
   config.include FeatureHelper, type: :feature
 

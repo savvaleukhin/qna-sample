@@ -40,7 +40,8 @@ gem 'remotipart'
 gem "nested_form"
 gem 'handlebars_assets'
 gem "private_pub"
-gem "thin"
+# gem "thin"
+gem 'puma'
 gem 'responders', '~> 2.0'
 
 group :development, :test do
@@ -55,7 +56,6 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-  gem 'capybara-webkit'
 end
 
 group :test do
@@ -63,6 +63,7 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'database_cleaner'
+  gem 'poltergeist'
 end
 
 group :development do
