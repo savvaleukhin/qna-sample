@@ -3,22 +3,27 @@
 
 .answers data={question_id: "#{@question.id}"}
   - if @answers.any?
+    h3 Answers
     = render 'answers'
 
 - if user_signed_in?
   = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
-    = f.label :body, 'Your answer'
-    .answer-errors
-    = f.text_area :body
+    .row
+      .col-md-6
+        .form-group
+          = f.label :body, 'Your answer'
+          .answer-errors
+          = f.text_area :body, class: "form-control", rows: 5
 
-    div id="attachment"
-      = f.fields_for :attachments do |a|
-        = a.label :file
-        = a.file_field :file
-        = a.link_to_remove 'Remove'
-      = f.link_to_add 'New attachment', :attachments
+        .form-group
+          div id="attachment"
+            = f.fields_for :attachments do |a|
+              = a.label :file
+              = a.file_field :file
+              = a.link_to_remove 'Remove'
+            = f.link_to_add 'New attachment', :attachments
 
-    = f.submit 'Create'
+        = f.submit 'Create', class: "btn btn-default"
 
 = subscribe_to "/questions/#{@question.id}/answers"
 = subscribe_to "/questions/#{@question.id}/comments"

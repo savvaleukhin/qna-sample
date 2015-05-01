@@ -18,16 +18,25 @@
                 td= link_to 'remove', attachment, remote: true, method: :delete
 
       - if user_signed_in? && current_user.id == @question.user_id
-        p= link_to 'Accept', accept_question_answer_path(@question, answer), remote: true, method: :post unless answer.accepted == true
+        p
+          = link_to 'Accept', accept_question_answer_path(@question, answer),
+              remote: true, method: :post unless answer.accepted == true
 
       - if user_signed_in? && current_user.id == answer.user_id
-        p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-        p= link_to 'Delete', [answer.question, answer], remote: true, method: :delete
+        p
+          = link_to 'Edit', '', class: 'edit-answer-link btn btn-link',
+              data: { answer_id: answer.id }
+          = link_to 'Delete', [answer.question, answer], remote: true, method: :delete,
+              class: "btn btn-link"
 
-      = form_for [@question, answer], remote: true, data: { type: :json }, html: { id: "edit-answer-#{answer.id}" } do |f|
-        = f.label :body, 'Answer'
-        = f.text_area :body
-        = f.submit 'Save'
+      = form_for [@question, answer],
+          remote: true, data: { type: :json }, html: { id: "edit-answer-#{answer.id}" } do |f|
+        .row
+          .col-md-6
+            .form-group
+              = f.label :body, 'Answer'
+              = f.text_area :body, class: "form-control", row: 10
+            = f.submit 'Save', class: "btn btn-default"
 
       = render partial: 'comments/comments', object: answer, as: 'commentable'
 

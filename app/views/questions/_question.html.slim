@@ -32,9 +32,9 @@ div id='question_body': p= question.body
 
   .question-errors
 
-  .row
-    .col-xs-6
-      = form_for question, remote: true, html: { id: 'edit-question' } do |f|
+  = form_for question, remote: true, html: { id: 'edit-question' } do |f|
+    .row
+      .col-xs-6
         .form-group
           = f.label :title
           = f.text_field :title, class: "form-control"

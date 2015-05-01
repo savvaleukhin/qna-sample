@@ -4,6 +4,9 @@ p= link_to 'add comment', '', class: 'add-comment-link',
 = form_for [commentable, Comment.new],
     html: { id: "add-comment-#{commentable.class.name.downcase}-#{commentable.id}" },
     remote: true, data: { type: :json } do |f|
-  = f.label :comment
-  = f.text_area :body
-  = f.submit 'Add'
+  .row
+    .col-md-6
+      .form-group
+        = f.label :comment
+        = f.text_area :body, class: "form-control", rows: 10
+      = f.submit 'Add', class: "btn btn-default"
