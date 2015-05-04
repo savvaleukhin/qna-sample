@@ -8,13 +8,15 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
   	:recoverable, :rememberable, :trackable, :validatable,
-    :omniauthable, omniauth_providers: [:facebook]
+    :omniauthable, omniauth_providers: [:facebook, :twitter]
 
   def self.find_for_oauth(auth)
     authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
     return authorization.user if authorization
 
     email = auth.info[:email]
+    return User.new unless email
+
     user = User.where(email: email).first
     if user
       user.create_authorization(auth)
@@ -28,5 +30,15 @@ class User < ActiveRecord::Base
 
   def create_authorization(auth)
     self.authorizations.create(provider: auth.provider, uid: auth.uid)
+  end
+
+  def email_valid?(email)
+    self.email = email
+    self.authorizations.new()
+    self.valid?
+  end
+
+  def password_required?
+    (authorizations.empty? || !password.blank?) && super
   end
 end

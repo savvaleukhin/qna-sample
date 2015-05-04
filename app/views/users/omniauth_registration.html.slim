@@ -1,0 +1,9 @@
+h4 Tell us your email
+
+= form_tag(omniauth_registration_path) do
+  .row
+    .col-md-4
+      .form-group
+        = label_tag 'Email'
+        = email_field_tag :email, '', class: "form-control"
+      = submit_tag 'Save', class: "btn btn-primary"

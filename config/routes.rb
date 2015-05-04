@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
+  match 'omniauth_registration', to: 'users#omniauth_registration', via: [:get, :post]
+
   resources :questions do
     resources :comments, defaults: { commentable: 'questions' }, only: [:create, :update, :destroy]
 
