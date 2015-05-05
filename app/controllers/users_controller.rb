@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def omniauth_registration
     check_user_existence
 
-    auth = OpenStruct.new session['devise.omniauth']
+    auth = OmniAuth::AuthHash.new session['devise.omniauth']
     auth.info[:email] = params[:email]
     @user = User.new
     @user = User.find_for_oauth(auth) if @user.email_valid?(params[:email])
