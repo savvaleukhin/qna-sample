@@ -6,18 +6,20 @@ class User < ActiveRecord::Base
   has_many :authorizations, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-  	:recoverable, :rememberable, :trackable, :validatable,
+  devise(
+    :database_authenticatable, :registerable,
+    :recoverable, :rememberable, :trackable, :validatable,
     :omniauthable, omniauth_providers: [:facebook, :twitter]
+  )
 
   def self.find_for_oauth(auth)
-    authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
+    authorization = Authorization.find_by(provider: auth.provider, uid: auth.uid.to_s)
     return authorization.user if authorization
 
     email = auth.info[:email]
     return User.new unless email
 
-    user = User.where(email: email).first
+    user = User.find_by(email: email)
     if user
       user.create_authorization(auth)
     else
@@ -29,12 +31,12 @@ class User < ActiveRecord::Base
   end
 
   def create_authorization(auth)
-    self.authorizations.create(provider: auth.provider, uid: auth.uid)
+    authorizations.create(provider: auth.provider, uid: auth.uid)
   end
 
   def email_valid?(email)
     self.email = email
-    self.authorizations.new()
+    authorizations.new
     self.valid?
   end
 

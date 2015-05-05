@@ -1,0 +1,9 @@
+<%- if devise_mapping.omniauthable? %>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+    <% if current_user.authorizations.find_by(provider: provider) %>
+      <%= provider.to_s.titleize %> account added<br />
+    <% else %>
+      <%= link_to "Add #{provider.to_s.titleize} account", omniauth_authorize_path(resource_name, provider) %><br />
+    <% end %>
+  <% end -%>
+<% end -%>
