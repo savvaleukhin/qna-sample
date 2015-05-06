@@ -1,0 +1,10 @@
+AllCops:
+  Exclude:
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'public/uploads/attachment/**/*'
+    - 'public/uploads/tmp/**/*'
+  RunRailsCops: true
+
+Metrics/LineLength:
+  Max: 100

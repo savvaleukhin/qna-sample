@@ -1,6 +1,9 @@
-h4 Tell us your email
+- if @user.errors.any?
+  ul class="list-unstyled"
+    - @user.errors.full_messages.each do |m|
+      li= m
 
-= form_tag(omniauth_registration_path) do
+= form_tag(omniauth_registrations_path) do
   .row
     .col-md-4
       .form-group

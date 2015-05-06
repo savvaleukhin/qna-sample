@@ -18,7 +18,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       set_flash_message(:notice, :success, kind: 'Twitter') if is_navigational_format?
     else
       session["devise.omniauth"] = request.env['omniauth.auth'].except('extra')
-      redirect_to omniauth_registration_path
+      redirect_to new_omniauth_registration_path
     end
   end
 
