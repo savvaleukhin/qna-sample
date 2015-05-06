@@ -30,8 +30,8 @@ class OmniauthRegistrationsController < ApplicationController
   end
 
   def check_email_valid
-    @user = User.new
-    return if @user.email_valid?(params[:email])
+    @user = User.new(email: params[:email], allow_blank_password: true)
+    return if @user.valid?
     render :new
   end
 

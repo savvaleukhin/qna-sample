@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  attr_accessor :allow_blank_password
+
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :votes, dependent: :destroy
@@ -34,13 +36,7 @@ class User < ActiveRecord::Base
     authorizations.create(provider: auth.provider, uid: auth.uid)
   end
 
-  def email_valid?(email)
-    self.email = email
-    authorizations.new
-    self.valid?
-  end
-
   def password_required?
-    (authorizations.empty? || !password.blank?) && super
+    !allow_blank_password && super
   end
 end
