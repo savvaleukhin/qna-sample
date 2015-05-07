@@ -23,14 +23,23 @@ class Ability
   def user_abilities
     guest_abilities
     can :create, [Question, Answer, Comment]
-    can :update, [Question, Answer, Comment], user: user
-    can :destroy, [Question, Answer, Comment], user: user
+    can [:update, :destroy], [Question, Answer, Comment], user: user
+
     can :destroy, Attachment do |attachment|
       attachment.attachmentable.user == user
     end
 
-    #can :vote, [Question, Answer]
-    #can :unvote, [Question, Answer]
+    can :accept, Answer do |answer|
+      answer.question.user == user
+    end
+
+    can :vote, [Question, Answer] do |object|
+      object.user != user
+    end
+
+    can :unvote, [Question, Answer] do |object|
+      object.user != user
+    end
   end
 
   def admin_abilities
