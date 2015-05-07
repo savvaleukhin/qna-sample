@@ -7,11 +7,13 @@ module Voted
   end
 
   def vote
+    authorize! :vote, @resource
     @resource.vote(current_user, params[:value])
     render 'vote'
   end
 
   def unvote
+    authorize! :vote, @resource
     @resource.unvote(current_user)
     render 'vote'
   end

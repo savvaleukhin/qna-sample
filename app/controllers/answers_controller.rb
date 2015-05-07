@@ -7,6 +7,8 @@ class AnswersController < ApplicationController
 
   include Voted
 
+  authorize_resource
+
   respond_to :js
   respond_to :json, only: [:create, :update]
 
@@ -42,6 +44,7 @@ class AnswersController < ApplicationController
   end
 
   def accept
+    authorize! :accept, @answer
     @answer.accept
     @answers = @question.answers.includes(:comments, :attachments)
     respond_with(@answers)

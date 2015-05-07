@@ -4,6 +4,8 @@ class CommentsController < ApplicationController
   before_action :load_comment, only: [:update, :destroy]
   before_action :correct_user, only: [:update, :destroy]
 
+  authorize_resource
+
   respond_to :json
 
   def create

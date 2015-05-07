@@ -7,6 +7,8 @@ class QuestionsController < ApplicationController
 
   include Voted
 
+  authorize_resource
+
   respond_to :html
   respond_to :js, only: [:update, :destroy]
 

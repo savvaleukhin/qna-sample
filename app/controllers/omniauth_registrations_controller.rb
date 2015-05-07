@@ -3,6 +3,8 @@ class OmniauthRegistrationsController < ApplicationController
   before_action :check_user_existence, only: :create
   before_action :check_email_valid, only: :create
 
+  skip_authorization_check
+
   def new
     @user = User.new
   end

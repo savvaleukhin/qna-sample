@@ -9,7 +9,7 @@ FactoryGirl.define do
 
   factory :answer_with_question, class: "Answer" do
     body
-    question
+    association :question, factory: :question_with_user
 
     factory :answer_with_user do
       body "User's answer"
