@@ -42,7 +42,6 @@ class AnswersController < ApplicationController
   end
 
   def accept
-    authorize! :accept, @answer
     @answer.accept
     @answers = @question.answers.includes(:comments, :attachments)
     respond_with(@answers)
