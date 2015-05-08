@@ -14,22 +14,22 @@
            - answer.attachments.each do |attachment|
             tr id="attachment-#{attachment.id}"
               td= link_to attachment.file.filename, attachment.file.url
-              - if user_signed_in? && can?(:destroy, attachment)
+              - if can?(:destroy, attachment)
                 td= link_to 'remove', attachment, remote: true, method: :delete
 
-      - if user_signed_in?
-        p
-          -if can?(:accept, answer)
-            = link_to 'Accept', accept_question_answer_path(@question, answer),
-                remote: true, method: :post unless answer.accepted == true
-        p
-          -if can?(:update, answer)
-            = link_to 'Edit', '', class: 'edit-answer-link btn btn-link',
-                data: { answer_id: answer.id }
-          -if can?(:destroy, answer)
-            = link_to 'Delete', [answer.question, answer], remote: true, method: :delete,
-                class: "btn btn-link"
+      p
+        -if can?(:accept, answer)
+          = link_to 'Accept', accept_question_answer_path(@question, answer),
+              remote: true, method: :post unless answer.accepted == true
+      p
+        -if can?(:update, answer)
+          = link_to 'Edit', '', class: 'edit-answer-link btn btn-link',
+              data: { answer_id: answer.id }
+        -if can?(:destroy, answer)
+          = link_to 'Delete', [answer.question, answer], remote: true, method: :delete,
+              class: "btn btn-link"
 
+      -if can?(:update, answer)
         = form_for [@question, answer],
             remote: true, data: { type: :json }, html: { id: "edit-answer-#{answer.id}" } do |f|
           .row
@@ -41,5 +41,5 @@
 
       = render partial: 'comments/comments', object: answer, as: 'commentable'
 
-      - if user_signed_in?
+      - if can?(:create, Comment)
         = render partial: 'comments/form', object: answer, as: 'commentable'

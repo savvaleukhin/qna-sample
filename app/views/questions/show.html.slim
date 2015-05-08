@@ -6,7 +6,7 @@
     h3 Answers
     = render 'answers'
 
-- if user_signed_in?
+- if can?(:create, Answer)
   = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
     .row
       .col-md-6

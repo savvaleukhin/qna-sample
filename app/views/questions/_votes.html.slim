@@ -1,18 +1,16 @@
 h4= answer.total_votes
 
-- if user_signed_in?
+-if can?(:vote, answer) && can?(:unvote, answer)
   - if answer.voted_by?(current_user)
     p your vote:
     p= answer.vote_by(current_user)
-    -if can?(:unvote, answer)
-      p= link_to "unvote",
-          unvote_question_answer_path(answer.question_id, answer),
-          remote: true, method: "post"
+    p= link_to "unvote",
+        unvote_question_answer_path(answer.question_id, answer),
+        remote: true, method: "post"
   - else
-    -if can?(:vote, answer)
-      p= link_to "up",
-          vote_question_answer_path(answer.question_id, answer, value: 1),
-          remote: true, method: "post"
-      p= link_to "down",
-          vote_question_answer_path(answer.question_id, answer, value: -1),
-          remote: true, method: "post"
+    p= link_to "up",
+        vote_question_answer_path(answer.question_id, answer, value: 1),
+        remote: true, method: "post"
+    p= link_to "down",
+        vote_question_answer_path(answer.question_id, answer, value: -1),
+        remote: true, method: "post"
