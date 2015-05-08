@@ -33,11 +33,7 @@ class Ability
       answer.question.user_id == user.id
     end
 
-    can :vote, [Question, Answer] do |object|
-      object.user_id != user.id
-    end
-
-    can :unvote, [Question, Answer] do |object|
+    can [:vote, :unvote], [Question, Answer] do |object|
       object.user_id != user.id
     end
   end
