@@ -3,12 +3,14 @@ div id='comments-#{commentable.class.name.downcase}-#{commentable.id}' class='co
     div id='comment-#{comment.id}'
       p[class='comment_body'] = comment.body
 
-      - if user_signed_in? && current_user.id == comment.user_id
+      - if user_signed_in?
         p
-          = link_to 'Edit', '', class: 'edit-comment-link btn btn-link',
-            data: { comment_id: comment.id }
-          = link_to 'Delete', [commentable, comment],
-              remote: true, method: :delete, data: { type: :json }, class: "btn btn-link"
+          -if can?(:update, comment)
+            = link_to 'Edit', '', class: 'edit-comment-link btn btn-link',
+              data: { comment_id: comment.id }
+          -if can?(:destroy, comment)
+            = link_to 'Delete', [commentable, comment],
+                remote: true, method: :delete, data: { type: :json }, class: "btn btn-link"
 
         = form_for [commentable, comment],
             html: { id: "edit-comment-#{comment.id}" },

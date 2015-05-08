@@ -1,4 +1,6 @@
-.authentication-data data={signed_in: "#{user_signed_in?}", user_id: "#{current_user.id if user_signed_in?}"}
+.authentication-data(
+  data={ signed_in: "#{user_signed_in?}", user_id: "#{current_user.id if user_signed_in?}" }
+)
 
 nav class="navbar navbar-default" role="navigation"
   div class="container"
