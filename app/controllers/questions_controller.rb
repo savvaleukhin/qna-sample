@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :load_question, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :correct_user, only: [:edit, :update, :destroy]
   before_action :load_questions_list, only: :index
   before_action :load_answers_list, only: :show
 
@@ -63,11 +62,6 @@ class QuestionsController < ApplicationController
 
   def load_answers_list
     @answers = @question.answers.includes(:comments, :attachments)
-  end
-
-  def correct_user
-    return if @question.user == current_user
-    redirect_to root_path, notice: 'You do not have permission to view this page.'
   end
 
   def question_params

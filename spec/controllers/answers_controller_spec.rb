@@ -169,7 +169,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can not mark the answer as Accepted' do
         expect { accept_answer }.not_to change { answer.reload.accepted }
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to redirect_to root_path
       end
     end
 
@@ -207,7 +207,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can not vote for the answer' do
         expect { vote_up_for_answer }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to redirect_to root_path
       end
     end
 
@@ -245,7 +245,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'can not unvote' do
         expect { unvote_for_answer }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to redirect_to root_path
       end
     end
 

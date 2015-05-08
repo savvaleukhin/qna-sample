@@ -2,7 +2,6 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_commentable
   before_action :load_comment, only: [:update, :destroy]
-  before_action :correct_user, only: [:update, :destroy]
 
   authorize_resource
 
@@ -64,11 +63,6 @@ class CommentsController < ApplicationController
 
   def commentable_channel
     "/questions/#{ @commentable.try(:question).try(:id) || @commentable.id }/comments"
-  end
-
-  def correct_user
-    return if @comment.user == current_user
-    render text: 'You do not have permission to view this page.', status: 403
   end
 
   def comments_params

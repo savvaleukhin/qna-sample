@@ -2,8 +2,6 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: [:create, :accept]
   before_action :load_answer, only: [:update, :destroy, :accept]
-  before_action :correct_user, only: [:update, :destroy]
-  before_action :question_owner, only: :accept
 
   include Voted
 
@@ -58,16 +56,6 @@ class AnswersController < ApplicationController
 
   def load_answer
     @answer = Answer.find(params[:id])
-  end
-
-  def correct_user
-    return if @answer.user == current_user
-    redirect_to root_path, notice: 'You do not have permission to view this page.'
-  end
-
-  def question_owner
-    return if @question.user_id == current_user.id
-    render text: 'You do not have permission to view this page.', status: 403
   end
 
   def answers_channel(question_id)

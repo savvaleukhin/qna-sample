@@ -204,7 +204,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'can not vote for the answer' do
         expect { post :vote, id: question, value: 1, format: :js }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to redirect_to root_path
       end
     end
 
@@ -232,7 +232,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'can not unvote' do
         expect { post :unvote, id: question, format: :js }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to redirect_to root_path
       end
     end
 

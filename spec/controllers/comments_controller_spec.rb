@@ -204,9 +204,9 @@ RSpec.describe CommentsController, type: :controller do
         expect { delete_comment }.not_to change(Answer, :count)
       end
 
-      it 'response' do
+      it 'redirects to root url' do
         delete_comment
-        expect(response.status).to eq 403
+        expect(response).to redirect_to root_url
       end
     end
 

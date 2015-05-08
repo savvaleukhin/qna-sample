@@ -41,9 +41,9 @@ RSpec.describe AttachmentsController, type: :controller do
           expect { delete_question_file }.not_to change(Attachment, :count)
         end
 
-        it 'forbidden' do
+        it 'redirects to root url' do
           delete_question_file
-          expect(response).to have_http_status(:forbidden)
+          expect(response).to redirect_to root_path
         end
       end
 
@@ -92,9 +92,9 @@ RSpec.describe AttachmentsController, type: :controller do
           expect { delete_answer_file }.not_to change(Attachment, :count)
         end
 
-        it 'forbidden' do
+        it 'redirets to root url' do
           delete_answer_file
-          expect(response).to have_http_status :forbidden
+          expect(response).to redirect_to root_path
         end
       end
 
