@@ -1,20 +1,23 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
    resources :omniauth_registrations, only: [:new, :create]
 
-  resources :questions do
-    resources :comments, defaults: { commentable: 'questions' }, only: [:create, :update, :destroy]
-
-    member do
-      post :vote
-      post :unvote
-    end
-
-    resources :answers, only: [:create, :update, :destroy] do
+   concern :votable do
       member do
-        post :accept
         post :vote
         post :unvote
+      end
+   end
+
+  resources :questions do
+    concerns :votable
+    resources :comments, defaults: { commentable: 'questions' }, only: [:create, :update, :destroy]
+
+    resources :answers, only: [:create, :update, :destroy] do
+      concerns :votable
+      member do
+        post :accept
       end
     end
   end
@@ -24,6 +27,14 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: :destroy
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: :index do
+        get :me, on: :collection
+      end
+    end
+  end
 
   root to: "questions#index"
 
