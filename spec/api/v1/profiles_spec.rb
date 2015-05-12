@@ -63,7 +63,7 @@ describe 'Profile API' do
       end
 
       it 'contains user_list' do
-        expect(response.body).to be_json_eql(user_list.to_json)
+        expect(response.body).to be_json_eql(user_list.to_json).at_path('profiles')
       end
 
       it 'does not contain current_user' do
