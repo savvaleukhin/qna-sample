@@ -1,23 +1,9 @@
 require 'rails_helper'
 
-shared_examples 'a api server' do
-  it 'returns 401 status if there is no access_token' do
-    get path, format: :json
-    expect(response.status).to eq 401
-  end
-
-  it 'returns 401 status if access_token is invalid' do
-    get path, format: :json, access_token: '1234'
-    expect(response.status).to eq 401
-  end
-end
-
 describe 'Profile API' do
   describe 'GET/me' do
-    context 'unauthorized' do
-      it_behaves_like 'a api server' do
-        let(:path) { '/api/v1/profiles/me' }
-      end
+    it_behaves_like 'api' do
+      let(:path) { '/api/v1/profiles/me' }
     end
 
     context 'authorized' do
@@ -45,10 +31,8 @@ describe 'Profile API' do
   end
 
   describe 'GET/index' do
-    context 'unauthorized' do
-      it_behaves_like 'a api server' do
-        let(:path) { '/api/v1/profiles' }
-      end
+    it_behaves_like 'api' do
+      let(:path) { '/api/v1/profiles' }
     end
 
     context 'authorized' do
