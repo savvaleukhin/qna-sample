@@ -4,7 +4,12 @@ AllCops:
     - 'db/**/*'
     - 'public/uploads/attachment/**/*'
     - 'public/uploads/tmp/**/*'
+    - 'app/views/**/*'
   RunRailsCops: true
+  DisplayCopNames: true
 
 Metrics/LineLength:
   Max: 100
+
+Style/Documentation:
+  Enabled: false
