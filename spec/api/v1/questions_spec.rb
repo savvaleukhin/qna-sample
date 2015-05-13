@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe 'Questions API' do
+  let(:user) { create(:user) }
+
   describe 'GET/index' do
     it_behaves_like 'api' do
       let(:path) { '/api/v1/questions' }
@@ -35,7 +37,6 @@ describe 'Questions API' do
   end
 
   describe 'GET/show' do
-    let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, user: user, question: question) }
     let!(:comment) { create(:comment, user: user, commentable: question) }
@@ -103,6 +104,29 @@ describe 'Questions API' do
             be_json_eql(attachment.file.url.to_json).at_path('question/attachments/0/url')
           )
         end
+      end
+    end
+  end
+
+  describe 'POST/create' do
+    context 'authorized' do
+      let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+
+      let(:post_question) do
+        post(
+          '/api/v1/questions',
+          format: :json,
+          access_token: access_token.token,
+          question: attributes_for(:question))
+      end
+
+      it 'returns status 201' do
+        post_question
+        expect(response.status).to eq 201
+      end
+
+      it 'saves the new question in the database' do
+        expect { post_question }.to change(Question, :count).by(1)
       end
     end
   end
