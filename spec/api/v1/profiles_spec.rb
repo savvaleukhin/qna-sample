@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Profile API' do
   describe 'GET/me' do
-    it_behaves_like 'api' do
+    it_behaves_like 'api get request' do
       let(:path) { '/api/v1/profiles/me' }
     end
 
@@ -31,7 +31,7 @@ describe 'Profile API' do
   end
 
   describe 'GET/index' do
-    it_behaves_like 'api' do
+    it_behaves_like 'api get request' do
       let(:path) { '/api/v1/profiles' }
     end
 

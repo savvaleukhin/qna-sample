@@ -4,7 +4,7 @@ describe 'Questions API' do
   let(:user) { create(:user) }
 
   describe 'GET/index' do
-    it_behaves_like 'api' do
+    it_behaves_like 'api get request' do
       let(:path) { '/api/v1/questions' }
     end
 
@@ -42,7 +42,7 @@ describe 'Questions API' do
     let!(:comment) { create(:comment, user: user, commentable: question) }
     let!(:attachment) { create(:attachment, attachmentable: question) }
 
-    it_behaves_like 'api' do
+    it_behaves_like 'api get request' do
       let(:path) { "/api/v1/questions/#{question.id}" }
     end
 
@@ -93,7 +93,6 @@ describe 'Questions API' do
         end
       end
 
-
       context 'attachments' do
         it 'includes in question object' do
           expect(response.body).to have_json_size(1).at_path('question/attachments')
@@ -109,6 +108,12 @@ describe 'Questions API' do
   end
 
   describe 'POST/create' do
+    it_behaves_like 'api post request' do
+      let(:path) { '/api/v1/questions' }
+      let(:resource) { 'question' }
+      let(:attributes) { attributes_for(:question) }
+    end
+
     context 'authorized' do
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
