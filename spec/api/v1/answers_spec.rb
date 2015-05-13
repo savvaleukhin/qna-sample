@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Questions API' do
+describe 'Answer API' do
   let(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
 
@@ -32,7 +32,7 @@ describe 'Questions API' do
       %w{id body created_at updated_at user_id accepted}.each do |attr|
         it "contains answer object #{attr}" do
           expect(response.body).to(
-            be_json_eql(answer.send(attr.to_sym).to_json).at_path("answers/0/#{attr}")
+            be_json_eql(answer.send(attr.to_sym).to_json).at_path("answers/1/#{attr}")
           )
         end
       end
@@ -70,30 +70,12 @@ describe 'Questions API' do
         end
       end
 
-      context 'comments' do
-        it 'includes in answer object' do
-          expect(response.body).to have_json_size(1).at_path('answer/comments')
-        end
-
-        %w{id body created_at updated_at user_id}.each do |attr|
-          it "contains #{attr}" do
-            expect(response.body).to(
-              be_json_eql(comment.send(attr.to_sym).to_json).at_path("answer/comments/0/#{attr}")
-            )
-          end
-        end
+      it_behaves_like 'it has comments json' do
+        let(:resource_name) { 'answer' }
       end
 
-      context 'attachments' do
-        it 'includes in answer object' do
-          expect(response.body).to have_json_size(1).at_path('answer/attachments')
-        end
-
-        it 'contains url' do
-          expect(response.body).to(
-            be_json_eql(attachment.file.url.to_json).at_path('answer/attachments/0/url')
-          )
-        end
+      it_behaves_like 'it has attachments json' do
+        let(:resource_name) { 'answer' }
       end
     end
   end
