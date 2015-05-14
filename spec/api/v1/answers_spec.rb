@@ -5,9 +5,7 @@ describe 'Answer API' do
   let!(:question) { create(:question, user: user) }
 
   describe 'GET/index' do
-    it_behaves_like 'api get request' do
-      let(:path) { "/api/v1/questions/#{question.id}/answers" }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
@@ -29,13 +27,17 @@ describe 'Answer API' do
         expect(response.body).to have_json_size(2).at_path('answers')
       end
 
-      %w{id body created_at updated_at user_id accepted}.each do |attr|
+      %w(id body created_at updated_at user_id accepted).each do |attr|
         it "contains answer object #{attr}" do
           expect(response.body).to(
-            be_json_eql(answer.send(attr.to_sym).to_json).at_path("answers/1/#{attr}")
+            be_json_eql(answer.send(attr.to_sym).to_json).at_path("answers/0/#{attr}")
           )
         end
       end
+    end
+
+    def do_request(options = {})
+      get "/api/v1/questions/#{question.id}/answers", { format: :json }.merge(options)
     end
   end
 
@@ -44,9 +46,7 @@ describe 'Answer API' do
     let!(:comment) { create(:comment, user: user, commentable: answer) }
     let!(:attachment) { create(:attachment, attachmentable: answer) }
 
-    it_behaves_like 'api get request' do
-      let(:path) { "/api/v1/questions/#{question.id}/answers/#{answer.id}" }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
@@ -62,7 +62,7 @@ describe 'Answer API' do
         expect(response).to be_success
       end
 
-      %w{id body created_at updated_at user_id accepted}.each do |attr|
+      %w(id body created_at updated_at user_id accepted).each do |attr|
         it "contains answer object #{attr}" do
           expect(response.body).to(
             be_json_eql(answer.send(attr.to_sym).to_json).at_path("answer/#{attr}")
@@ -78,14 +78,14 @@ describe 'Answer API' do
         let(:resource_name) { 'answer' }
       end
     end
+
+    def do_request(options = {})
+      get "/api/v1/questions/#{question.id}/answers/#{answer.id}", { format: :json }.merge(options)
+    end
   end
 
   describe 'POST/create' do
-    it_behaves_like 'api post request' do
-      let(:path) { "/api/v1/questions/#{question.id}/answers" }
-      let(:resource) { 'answer' }
-      let(:attributes) { attributes_for(:answer) }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
@@ -107,6 +107,13 @@ describe 'Answer API' do
       it 'saves the new answer in the database' do
         expect { post_answer }.to change(Answer, :count).by(1)
       end
+    end
+
+    def do_request(options = {})
+      post(
+        "/api/v1/questions/#{question.id}/answers",
+        { format: :json, question_id: question.id, answer: attributes_for(:answer) }.merge(options)
+      )
     end
   end
 end

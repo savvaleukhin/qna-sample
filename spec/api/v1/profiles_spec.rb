@@ -2,9 +2,7 @@ require 'rails_helper'
 
 describe 'Profile API' do
   describe 'GET/me' do
-    it_behaves_like 'api get request' do
-      let(:path) { '/api/v1/profiles/me' }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let(:me) { create(:user) }
@@ -28,12 +26,14 @@ describe 'Profile API' do
         end
       end
     end
+
+    def do_request(options = {})
+      get '/api/v1/profiles/me', { format: :json }.merge(options)
+    end
   end
 
   describe 'GET/index' do
-    it_behaves_like 'api get request' do
-      let(:path) { '/api/v1/profiles' }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let!(:user_list) { create_list(:user, 3) }
@@ -53,6 +53,10 @@ describe 'Profile API' do
       it 'does not contain current_user' do
         expect(response.body).to_not include_json(current_user.to_json)
       end
+    end
+
+    def do_request(options = {})
+      get '/api/v1/profiles', { format: :json }.merge(options)
     end
   end
 end

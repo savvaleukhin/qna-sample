@@ -4,9 +4,7 @@ describe 'Questions API' do
   let(:user) { create(:user) }
 
   describe 'GET/index' do
-    it_behaves_like 'api get request' do
-      let(:path) { '/api/v1/questions' }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let(:me) { create(:user) }
@@ -25,7 +23,7 @@ describe 'Questions API' do
       end
 
       context 'question preview' do
-        %w{id title created_at updated_at user_id}.each do |attr|
+        %w(id title created_at updated_at user_id).each do |attr|
           it "contains question object #{attr}" do
             expect(response.body).to(
               be_json_eql(question.send(attr.to_sym).to_json).at_path("questions/0/#{attr}")
@@ -33,6 +31,10 @@ describe 'Questions API' do
           end
         end
       end
+    end
+
+    def do_request(options = {})
+      get '/api/v1/questions', { format: :json }.merge(options)
     end
   end
 
@@ -42,9 +44,7 @@ describe 'Questions API' do
     let!(:comment) { create(:comment, user: user, commentable: question) }
     let!(:attachment) { create(:attachment, attachmentable: question) }
 
-    it_behaves_like 'api get request' do
-      let(:path) { "/api/v1/questions/#{question.id}" }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
@@ -57,7 +57,7 @@ describe 'Questions API' do
         expect(response).to be_success
       end
 
-      %w{id title body created_at updated_at}.each do |attr|
+      %w(id title body created_at updated_at).each do |attr|
         it "contains question object #{attr}" do
           expect(response.body).to(
             be_json_eql(question.send(attr.to_sym).to_json).at_path("question/#{attr}")
@@ -70,7 +70,7 @@ describe 'Questions API' do
           expect(response.body).to have_json_size(1).at_path('question/answers')
         end
 
-        %w{id body created_at updated_at user_id accepted}.each do |attr|
+        %w(id body created_at updated_at user_id accepted).each do |attr|
           it "contains #{attr}" do
             expect(response.body).to(
               be_json_eql(answer.send(attr.to_sym).to_json).at_path("question/answers/0/#{attr}")
@@ -87,14 +87,14 @@ describe 'Questions API' do
         let(:resource_name) { 'question' }
       end
     end
+
+    def do_request(options = {})
+      get "/api/v1/questions/#{question.id}", { format: :json }.merge(options)
+    end
   end
 
   describe 'POST/create' do
-    it_behaves_like 'api post request' do
-      let(:path) { '/api/v1/questions' }
-      let(:resource) { 'question' }
-      let(:attributes) { attributes_for(:question) }
-    end
+    it_behaves_like 'api resource'
 
     context 'authorized' do
       let(:access_token) { create(:access_token, resource_owner_id: user.id) }
@@ -115,6 +115,12 @@ describe 'Questions API' do
       it 'saves the new question in the database' do
         expect { post_question }.to change(Question, :count).by(1)
       end
+    end
+
+    def do_request(options = {})
+      post(
+        '/api/v1/questions', { format: :json, question: attributes_for(:question) }.merge(options)
+      )
     end
   end
 end
