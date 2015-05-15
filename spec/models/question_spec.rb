@@ -12,4 +12,8 @@ RSpec.describe Question, type: :model do
   it { should validate_length_of(:title).is_at_most(100) }
 
   it { should accept_nested_attributes_for :attachments }
+
+  it_behaves_like 'votable' do
+    let(:votable) { create(:question_with_user) }
+  end
 end

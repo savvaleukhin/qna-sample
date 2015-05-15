@@ -40,4 +40,8 @@ RSpec.describe Answer, type: :model do
       expect(answer_2.accepted).to eq true
     end
   end
+
+  it_behaves_like 'votable' do
+    let(:votable) { create(:answer_with_user) }
+  end
 end
