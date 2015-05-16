@@ -20,6 +20,15 @@ shared_examples 'comment that can be created' do
       post_comment
       expect(response.status).to eq 204
     end
+
+    it 'publishes comment with PrivatePub' do
+      expect(PrivatePub).to(
+        receive(:publish_to).with(
+          "/questions/#{ commentable.try(:question).try(:id) || commentable.id }/comments",
+          hash_including(comment: /.*/, method: 'POST'))
+      )
+      post_comment
+    end
   end
 
   context 'Invalid attributes' do
@@ -48,6 +57,7 @@ end
 
 shared_examples 'comment that can be updated' do
   context 'Valid attributes' do
+    let(:commentable) { comment.commentable }
     before { sign_in_user(comment.user) }
 
     let(:update_comment) do
@@ -63,6 +73,15 @@ shared_examples 'comment that can be updated' do
     it 'response' do
       update_comment
       expect(response.status).to eq 204
+    end
+
+    it 'publishes comment with PrivatePub' do
+      expect(PrivatePub).to(
+        receive(:publish_to).with(
+          "/questions/#{ commentable.try(:question).try(:id) || commentable.id }/comments",
+          hash_including(comment: /.*/, method: 'PATCH'))
+      )
+      update_comment
     end
   end
 
@@ -81,10 +100,20 @@ end
 
 shared_examples 'comment that can be destroyed' do
   context 'valid user' do
+    let(:commentable) { comment.commentable }
     before { sign_in_user(comment.user) }
 
     it 'deletes the comment' do
       expect { delete_comment }.to change(Comment, :count).by(-1)
+    end
+
+    it 'publishes comment with PrivatePub' do
+      expect(PrivatePub).to(
+        receive(:publish_to).with(
+          "/questions/#{ commentable.try(:question).try(:id) || commentable.id }/comments",
+          hash_including(comment: /.*/, method: 'DELETE'))
+      )
+      delete_comment
     end
   end
 

@@ -30,6 +30,14 @@ RSpec.describe AnswersController, type: :controller do
         post_answer
         expect(response.status).to eq 200
       end
+
+      it 'publishes answer with PrivatePub' do
+        expect(PrivatePub).to(
+          receive(:publish_to).with(
+            "/questions/#{question.id}/answers", hash_including(answer: [''], method: 'POST'))
+        )
+        post_answer
+      end
     end
 
     context 'JSON with invalid attributes' do
@@ -74,6 +82,14 @@ RSpec.describe AnswersController, type: :controller do
       it 'response' do
         update_answer
         expect(response.status).to eq 200
+      end
+
+      it 'publishes answer with PrivatePub' do
+        expect(PrivatePub).to(
+          receive(:publish_to).with(
+            "/questions/#{question.id}/answers", hash_including(answer: [''], method: 'PATCH'))
+        )
+        update_answer
       end
     end
 
