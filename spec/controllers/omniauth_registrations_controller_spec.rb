@@ -3,9 +3,8 @@ require 'rails_helper'
 RSpec.describe OmniauthRegistrationsController, type: :controller do
   let(:user) { create(:user, email: 'test@test.com') }
   let(:auth_twitter) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456', info: {}) }
-  let(:post_email) { post :create, email: 'test@test.com'}
-  let(:post_invalid_email) { post :create, email: nil}
-
+  let(:post_email) { post :create, email: 'test@test.com' }
+  let(:post_invalid_email) { post :create, email: nil }
 
   describe 'POST #create' do
     context 'Existent user' do

@@ -181,79 +181,8 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'POST #vote' do
-    let(:vote_up_for_answer) do
-      post :vote, question_id: answer.question, id: answer, value: 1, format: :js
-    end
-
-    let(:vote_down_for_answer) do
-      post :vote, question_id: answer.question, id: answer, value: -1, format: :js
-    end
-
-    context 'valid user' do
-      before { sign_in_user(non_author) }
-
-      it 'votes UP for the answer' do
-        expect { vote_up_for_answer }.to change(Vote, :count).by(1)
-      end
-
-      it 'votes DOWN for the answer' do
-        expect { vote_down_for_answer }.to change(Vote, :count).by(1)
-      end
-    end
-
-    context 'invalid user' do
-      before { sign_in_user(answer.user) }
-
-      it 'can not vote for the answer' do
-        expect { vote_up_for_answer }.not_to change(Vote, :count)
-        expect(response).to redirect_to root_path
-      end
-    end
-
-    context 'guest user' do
-      it 'can not vote for the answer' do
-        expect { vote_up_for_answer }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-  end
-
-  describe 'POST #unvote' do
-    let(:unvote_for_answer) do
-      post :unvote, question_id: answer.question, id: answer, format: :js
-    end
-
-    before do
-      create(
-        :vote,
-        user_id: non_author.id,
-        votable_id: answer.id,
-        votable_type: answer.class.name)
-    end
-
-    context 'valid user' do
-      before { sign_in_user(non_author) }
-
-      it 'unvotes' do
-        expect { unvote_for_answer }.to change(Vote, :count).by(-1)
-      end
-    end
-
-    context 'invalid user' do
-      before { sign_in_user(answer.user) }
-
-      it 'can not unvote' do
-        expect { unvote_for_answer }.not_to change(Vote, :count)
-        expect(response).to redirect_to root_path
-      end
-    end
-
-    context 'guest user' do
-      it 'can not unvote' do
-        expect { unvote_for_answer }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
+  it_behaves_like 'voted' do
+    let(:votable) { answer }
+    let(:options) { { question_id: votable.question } }
   end
 end

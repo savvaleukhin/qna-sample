@@ -74,7 +74,9 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with valid attributes' do
       it 'saves the new question in the database' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        expect do
+          post :create, question: attributes_for(:question)
+        end.to change(Question, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -85,7 +87,9 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save new question in the database' do
-        expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+        expect do
+          post :create, question: attributes_for(:invalid_question)
+        end.to_not change(Question, :count)
       end
 
       it 're-renders new view' do
@@ -118,7 +122,9 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'invalid attributes' do
-      before { patch :update, id: question, question: { title: 'new_title', body: nil }, format: :js }
+      before do
+        patch :update, id: question, question: { title: 'new_title', body: nil }, format: :js
+      end
 
       it 'does not change question attributes' do
         question.reload
@@ -186,61 +192,8 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'POST #vote' do
-    context 'valid user' do
-      before { sign_in_user(non_author) }
-
-      it 'votes UP for the answer' do
-        expect { post :vote, id: question, value: 1, format: :js }.to change(Vote, :count).by(1)
-      end
-
-      it 'votes DOWN for the answer' do
-        expect { post :vote, id: question, value: -1, format: :js }.to change(Vote, :count).by(1)
-      end
-    end
-
-    context 'invalid user' do
-      before { sign_in_user(question.user) }
-
-      it 'can not vote for the answer' do
-        expect { post :vote, id: question, value: 1, format: :js }.not_to change(Vote, :count)
-        expect(response).to redirect_to root_path
-      end
-    end
-
-    context 'guest user' do
-      it 'can not vote for the answer' do
-        expect { post :vote, id: question, value: 1, format: :js }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-  end
-
-  describe 'POST #unvote' do
-    before { create(:vote, user_id: non_author.id, votable_id: question.id, votable_type: question.class.name) }
-
-    context 'valid user' do
-      before { sign_in_user(non_author) }
-
-      it 'unvotes' do
-        expect { post :unvote, id: question, format: :js }.to change(Vote, :count).by(-1)
-      end
-    end
-
-    context 'invalid user' do
-      before { sign_in_user(question.user) }
-
-      it 'can not unvote' do
-        expect { post :unvote, id: question, format: :js }.not_to change(Vote, :count)
-        expect(response).to redirect_to root_path
-      end
-    end
-
-    context 'guest user' do
-      it 'can not unvote' do
-        expect { post :unvote, id: question, format: :js }.not_to change(Vote, :count)
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
+  it_behaves_like 'voted' do
+    let(:votable) { question }
+    let(:options) { {} }
   end
 end
