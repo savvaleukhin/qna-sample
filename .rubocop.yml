@@ -5,6 +5,7 @@ AllCops:
     - 'public/uploads/attachment/**/*'
     - 'public/uploads/tmp/**/*'
     - 'app/views/**/*'
+    - 'bin/**/*'
   RunRailsCops: true
   DisplayCopNames: true
 

@@ -1,15 +1,14 @@
 shared_examples 'it has comments json' do
   context 'comments' do
-    it "includes comments in object" do
-      expect(response.body).to have_json_size(1).at_path(resource_name + "/comments")
+    it 'includes comments in object' do
+      expect(response.body).to have_json_size(1).at_path(resource_name + '/comments')
     end
 
-    %w{id body created_at updated_at user_id}.each do |attr|
+    %w(id body created_at updated_at user_id).each do |attr|
       it "contains #{attr}" do
         expect(response.body).to(
           be_json_eql(
-            comment.send(attr.to_sym).to_json).at_path(resource_name + "/comments/0/#{attr}"
-          )
+            comment.send(attr.to_sym).to_json).at_path(resource_name + "/comments/0/#{attr}")
         )
       end
     end
