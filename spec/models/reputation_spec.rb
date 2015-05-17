@@ -47,7 +47,46 @@ describe Reputation do
     end
 
     context 'Accept' do
+      let(:answer) { create(:answer, question: question, user: other) }
 
+      it 'returns +3' do
+        expect(Reputation.calculate(answer, :accept)).to eq 3
+      end
+    end
+
+    context 'Vote' do
+      let(:answer) { create(:answer, question: question, user: other) }
+
+      context 'up' do
+        it 'returns +1' do
+          expect(Reputation.calculate(answer, :vote_up)).to eq 1
+        end
+      end
+
+      context 'down' do
+        it 'returns -1' do
+          expect(Reputation.calculate(answer, :vote_down)).to eq(-1)
+        end
+      end
+    end
+  end
+
+  describe 'Question actions' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+
+    context 'Vote' do
+      context 'up' do
+        it 'returns +2' do
+          expect(Reputation.calculate(question, :vote_up)).to eq 2
+        end
+      end
+
+      context 'down' do
+        it 'returns -2' do
+          expect(Reputation.calculate(question, :vote_down)).to eq(-2)
+        end
+      end
     end
   end
 end
