@@ -4,8 +4,10 @@ module Reputable
   private
 
   def update_reputation(object, method, user)
-    diff = Reputation.calculate(object, method)
-    reputation = user.reputation + diff
-    user.update(reputation: reputation)
+    user.with_lock do
+      diff = Reputation.calculate(object, method)
+      reputation = user.reputation + diff
+      user.update(reputation: reputation)
+    end
   end
 end
