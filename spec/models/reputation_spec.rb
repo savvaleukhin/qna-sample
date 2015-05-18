@@ -46,6 +46,46 @@ describe Reputation do
       end
     end
 
+    context 'Destroy' do
+      context 'the first answer' do
+        context 'user is the question author' do
+          let!(:answer) { create(:answer, question: question, user: user) }
+
+          it 'returns -4 before destroying answer' do
+            expect(Reputation.calculate(answer, :destroy)).to eq(-4)
+          end
+        end
+
+        context 'user is not the question author' do
+          let!(:answer) { create(:answer, question: question, user: other) }
+
+          it 'returns -2 before destroying answer' do
+            expect(Reputation.calculate(answer, :destroy)).to eq(-2)
+          end
+        end
+      end
+
+      context 'not the first answer' do
+        let!(:first_answer) { create(:answer, question: question, user: user) }
+
+        context 'user is the question author' do
+          let!(:answer) { create(:answer, question: question, user: user) }
+
+          it 'returns -3 before destroying answer' do
+            expect(Reputation.calculate(answer, :destroy)).to eq(-3)
+          end
+        end
+
+        context 'user is not the question author' do
+          let(:answer) { create(:answer, question: question, user: other) }
+
+          it 'returns -1 before destroying answer' do
+            expect(Reputation.calculate(answer, :destroy)).to eq(-1)
+          end
+        end
+      end
+    end
+
     context 'Accept' do
       let(:answer) { create(:answer, question: question, user: other) }
 

@@ -11,6 +11,7 @@ class Answer < ActiveRecord::Base
   accepts_nested_attributes_for :attachments, reject_if: -> (a) { a[:file].blank? }, allow_destroy: true
 
   after_create :calculate_reputation
+  before_destroy :rollback_reputation
 
   scope :by_top, -> { order('accepted DESC') }
 
@@ -27,5 +28,9 @@ class Answer < ActiveRecord::Base
 
   def calculate_reputation
     update_reputation(self, :create, self.user)
+  end
+
+  def rollback_reputation
+    update_reputation(self, :destroy, self.user)
   end
 end

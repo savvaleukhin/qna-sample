@@ -13,6 +13,7 @@ class Reputation
     when 'Answer'
       case method
       when :create then create_answer_action(object)
+      when :destroy then -1 * create_answer_action(object)
       when :accept then return ACCEPT_ANSWER
       when :vote_up then return VOTE_UP_ANSWER
       when :vote_down then return VOTE_DOWN_ANSWER

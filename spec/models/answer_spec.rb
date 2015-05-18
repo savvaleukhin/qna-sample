@@ -80,5 +80,20 @@ RSpec.describe Answer, type: :model do
         expect { subject.accept }.to change(subject.user, :reputation).by(3)
       end
     end
+
+    context 'before destroying answer' do
+      before { subject.save! }
+
+      it 'calculates reputation' do
+        allow(Reputation).to receive(:calculate).and_return(-3)
+        expect(Reputation).to receive(:calculate).with(subject, :destroy)
+        subject.destroy
+      end
+
+      it 'saves user reputation' do
+        allow(Reputation).to receive(:calculate).and_return(-3)
+        expect { subject.destroy }.to change(subject.user, :reputation).by(-3)
+      end
+    end
   end
 end
