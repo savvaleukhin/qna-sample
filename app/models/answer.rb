@@ -21,7 +21,7 @@ class Answer < ActiveRecord::Base
       update(accepted: true)
     end
 
-    update_reputation(self, __method__, self.user)
+    delay.update_reputation(self, __method__, self.user)
   end
 
   private
