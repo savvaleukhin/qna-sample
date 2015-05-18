@@ -15,4 +15,68 @@ RSpec.describe Vote, type: :model do
 
     should validate_uniqueness_of(:user_id).scoped_to([:votable_id, :votable_type])
   end
+
+  describe 'reputation' do
+    let(:question) { create(:question_with_user) }
+    let(:user) { create(:user) }
+    subject { build(:vote, value: 1, votable: question, user: user) }
+
+    context 'after saving vote' do
+      it 'does not calculate reputation after updating' do
+        subject.save!
+        expect(Reputation).to_not receive(:calculate)
+        subject.update(value: -1)
+      end
+
+      it 'saves user reputation' do
+        allow(Reputation).to receive(:calculate).and_return(2)
+        expect { subject.save! }.to change(question.user, :reputation).by(2)
+      end
+
+      context 'upvote' do
+        it 'calculates reputation after creating' do
+          allow(Reputation).to receive(:calculate).and_return(1)
+          expect(Reputation).to receive(:calculate).with(question, :vote_up)
+          subject.save!
+        end
+      end
+
+      context 'downvote' do
+        subject { build(:vote, value: -1, votable: question, user: user) }
+
+        it 'calculates reputation after creating' do
+          allow(Reputation).to receive(:calculate).and_return(-1)
+          expect(Reputation).to receive(:calculate).with(question, :vote_down)
+          subject.save!
+        end
+      end
+    end
+
+    context 'after destroying vote' do
+      context 'destroying upvote' do
+        subject { create(:vote, value: -1, votable: question, user: user) }
+
+        it 'calculates reputation' do
+          allow(Reputation).to receive(:calculate).and_return(-1)
+          expect(Reputation).to receive(:calculate).with(question, :vote_down)
+          subject.destroy
+        end
+      end
+
+      context 'destroying downvote' do
+        subject { create(:vote, value: -1, votable: question, user: user) }
+
+        it 'calculates reputation' do
+          allow(Reputation).to receive(:calculate).and_return(1)
+          expect(Reputation).to receive(:calculate).with(question, :vote_up)
+          subject.destroy
+        end
+      end
+
+      it 'saves user reputation' do
+        allow(Reputation).to receive(:calculate).and_return(1)
+        expect { subject.destroy }.to change(question.user, :reputation).by(1)
+      end
+    end
+  end
 end

@@ -20,7 +20,7 @@ class Reputation
     when 'Question'
       case method
       when :vote_up then return VOTE_UP_QUESTION
-        when :vote_down then return VOTE_DOWN_QUESTION
+      when :vote_down then return VOTE_DOWN_QUESTION
       end
     end
   end

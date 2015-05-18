@@ -9,16 +9,10 @@ module Votable
     vote = votes.find_or_initialize_by(user: user)
     vote.value = value
     vote.save!
-
-    if value == 1
-      update_reputation(:vote_up)
-    else
-      update_reputation(:vote_down)
-    end
   end
 
   def unvote(user)
-    votes.where(user: user).delete_all
+    votes.where(user: user).destroy_all
   end
 
   def voted_by?(user)

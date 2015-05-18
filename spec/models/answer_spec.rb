@@ -47,21 +47,38 @@ RSpec.describe Answer, type: :model do
   describe 'reputation' do
     subject { build(:answer_with_user) }
 
-    it 'calculates reputation after creating' do
-      allow(Reputation).to receive(:calculate).and_return(2)
-      expect(Reputation).to receive(:calculate).with(subject, :create)
-      subject.save!
+    context 'after saving answer' do
+      it 'calculates reputation after creating' do
+        allow(Reputation).to receive(:calculate).and_return(2)
+        expect(Reputation).to receive(:calculate).with(subject, :create)
+        subject.save!
+      end
+
+      it 'does not calculate reputation after updating' do
+        subject.save!
+        expect(Reputation).to_not receive(:calculate)
+        subject.update(body: 'new body')
+      end
+
+      it 'saves user reputation' do
+        allow(Reputation).to receive(:calculate).and_return(2)
+        expect { subject.save! }.to change(subject.user, :reputation).by(2)
+      end
     end
 
-    it 'doe not calculate reputation after updating' do
-      subject.save!
-      expect(Reputation).to_not receive(:calculate)
-      subject.update(body: 'new body')
-    end
+    context 'after accepting answer' do
+      before { subject.save! }
 
-    it 'saves user reputation' do
-      allow(Reputation).to receive(:calculate).and_return(2)
-      expect { subject.save! }.to change(subject.user, :reputation).by(2)
+      it 'calculates reputation' do
+        allow(Reputation).to receive(:calculate).and_return(3)
+        expect(Reputation).to receive(:calculate).with(subject, :accept)
+        subject.accept
+      end
+
+      it 'saves user reputation' do
+        allow(Reputation).to receive(:calculate).and_return(3)
+        expect { subject.accept }.to change(subject.user, :reputation).by(3)
+      end
     end
   end
 end

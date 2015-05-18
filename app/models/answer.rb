@@ -1,5 +1,6 @@
 class Answer < ActiveRecord::Base
   include Votable
+  include Reputable
 
   belongs_to :question
   belongs_to :user
@@ -19,18 +20,12 @@ class Answer < ActiveRecord::Base
       update(accepted: true)
     end
 
-    update_reputation(__method__)
+    update_reputation(self, __method__, self.user)
   end
 
   private
 
   def calculate_reputation
-    update_reputation(:create)
-  end
-
-  def update_reputation(method)
-    diff = Reputation.calculate(self, method)
-    reputation = self.user.reputation + diff
-    self.user.update(reputation: reputation)
+    update_reputation(self, :create, self.user)
   end
 end
