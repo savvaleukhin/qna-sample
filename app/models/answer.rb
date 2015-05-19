@@ -36,6 +36,6 @@ class Answer < ActiveRecord::Base
   end
 
   def notify_question_owner
-    UserMailer.delay.notify_question_owner(self.id)
+    UserMailer.delay.notify_question_owner(self)
   end
 end

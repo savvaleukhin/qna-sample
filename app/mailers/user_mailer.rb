@@ -5,8 +5,8 @@
   #
   #   en.user_mailer.notify_question_owner.subject
   #
-  def notify_question_owner(answer_id)
-    @answer = Answer.find(answer_id)
+  def notify_question_owner(answer)
+    @answer = answer
     recipient = @answer.question.user.email
 
     mail(to: recipient, subject: 'New answer for your question')

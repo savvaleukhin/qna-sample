@@ -104,7 +104,7 @@ RSpec.describe Answer, type: :model do
     subject { build(:answer_with_user) }
 
     it 'sends notification to question owner' do
-      expect(UserMailer).to receive(:notify_question_owner).with(kind_of(Numeric)).and_call_original
+      expect(UserMailer).to receive(:notify_question_owner).with(subject).and_call_original
       subject.save!
     end
   end
