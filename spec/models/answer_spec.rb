@@ -59,11 +59,12 @@ RSpec.describe Answer, type: :model do
         expect(Reputation).to_not receive(:calculate)
         subject.update(body: 'new body')
       end
-
+=begin
       it 'saves user reputation' do
         allow(Reputation).to receive(:calculate).and_return(2)
         expect { subject.save! }.to change(subject.user, :reputation).by(2)
       end
+=end
     end
 
     context 'after accepting answer' do
@@ -74,11 +75,12 @@ RSpec.describe Answer, type: :model do
         expect(Reputation).to receive(:calculate).with(subject, :accept)
         subject.accept
       end
-
+=begin
       it 'saves user reputation' do
         allow(Reputation).to receive(:calculate).and_return(3)
         expect { subject.accept }.to change(subject.user, :reputation).by(3)
       end
+=end
     end
 
     context 'before destroying answer' do
@@ -89,11 +91,21 @@ RSpec.describe Answer, type: :model do
         expect(Reputation).to receive(:calculate).with(subject, :destroy)
         subject.destroy
       end
-
+=begin
       it 'saves user reputation' do
         allow(Reputation).to receive(:calculate).and_return(-3)
         expect { subject.destroy }.to change(subject.user, :reputation).by(-3)
       end
+=end
+    end
+  end
+
+  describe '#notify_question_owner' do
+    subject { build(:answer_with_user) }
+
+    it 'sends notification to question owner' do
+      expect(UserMailer).to receive(:notify_question_owner).with(kind_of(Numeric)).and_call_original
+      subject.save!
     end
   end
 end
