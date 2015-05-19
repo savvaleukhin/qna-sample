@@ -21,16 +21,16 @@ class Answer < ActiveRecord::Base
       update(accepted: true)
     end
 
-    delay.update_reputation(self, __method__, self.user)
+    self.delay.update_reputation(self, __method__, self.user)
   end
 
   private
 
   def calculate_reputation
-    update_reputation(self, :create, self.user)
+    self.delay.update_reputation(self, :create, self.user)
   end
 
   def rollback_reputation
-    update_reputation(self, :destroy, self.user)
+    self.delay.update_reputation(self, :destroy, self.user)
   end
 end

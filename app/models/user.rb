@@ -33,8 +33,9 @@ class User < ActiveRecord::Base
   end
 
   def self.send_daily_digest
+    return if Question.published_last_day.empty?
     find_each.each do |user|
-      DailyMailer.digest(user).deliver_later
+      DailyMailer.delay.digest(user)
     end
   end
 

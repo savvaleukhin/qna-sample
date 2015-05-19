@@ -83,9 +83,16 @@ RSpec.describe User, type: :model do
 
   describe '.send_daily_digest' do
     let(:users) { create_list(:user, 2) }
+    let(:question) { create(:question, user: users.first) }
 
     it 'sends daily digest to all users' do
+      question
       users.each { |user| expect(DailyMailer).to receive(:digest).with(user).and_call_original }
+      User.send_daily_digest
+    end
+
+    it 'does not send daily digest if there is no questions for the last day' do
+      users.each { |user| expect(DailyMailer).to_not receive(:digest).with(user) }
       User.send_daily_digest
     end
   end
