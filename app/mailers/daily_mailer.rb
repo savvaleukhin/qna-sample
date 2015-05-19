@@ -7,7 +7,6 @@ class DailyMailer < ApplicationMailer
   #
   def digest(user)
     @questions = Question.published_last_day
-
-    mail to: user.email
+    mail(to: user.email, subject: 'QnA daily digest')
   end
 end
