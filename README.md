@@ -6,3 +6,6 @@
     * Shared examples
     * Stubs & Mocks
     * Messages expectations
+* Lesson-17
+  * Delayed Jobs
+  * Scheduled jobs
