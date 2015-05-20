@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :questions do
     concerns :votable
     resources :comments, defaults: { commentable: 'questions' }, only: [:create, :update, :destroy]
+    resources :subscriptions, only: [:create, :destroy]
 
     resources :answers, only: [:create, :update, :destroy] do
       concerns :votable

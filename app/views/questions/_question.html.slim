@@ -1,5 +1,12 @@
 div id='question_title': h2= question.title
 
+- if can?(:create, Subscription)
+  div id='subscription_form'
+    - if question.subscribed_by?(current_user.id)
+      = render partial: 'unsubscribe', object: question, as: 'question'
+    - else
+      = render partial: 'subscribe', object: question, as: 'question'
+
 .question_votes
   h4= question.total_votes
 

@@ -38,7 +38,7 @@ feature 'Edit question', %q{
       expect(page).to_not have_content question.body
       expect(page).to have_content 'Modified question'
       expect(page).to have_content 'body of modified question'
-      expect(page).to_not have_selector 'form'
+      expect(page).to_not have_selector 'form#edit-question'
     end
   end
 end

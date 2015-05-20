@@ -1,0 +1,2 @@
+= link_to 'Unsubscribe', [question, question.subscription_for(current_user.id)],
+    remote: true, method: :delete, class: 'btn btn-danger btn-xs'

@@ -14,4 +14,12 @@ class Question < ActiveRecord::Base
   validates :title, length: { maximum: 100 }
 
   accepts_nested_attributes_for :attachments, reject_if: -> (a) { a[:file].blank? }, allow_destroy: true
+
+  def subscription_for(user_id)
+    subscriptions.find_by(subscriber_id: user_id)
+  end
+
+  def subscribed_by?(user_id)
+    subscriptions.where(subscriber_id: user_id).any?
+  end
 end
