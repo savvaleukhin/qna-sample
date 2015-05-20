@@ -1,6 +1,4 @@
 class Vote < ActiveRecord::Base
-  include Reputable
-
   belongs_to :user
   belongs_to :votable, polymorphic: true
 
@@ -15,17 +13,17 @@ class Vote < ActiveRecord::Base
 
   def calculate_reputation
     if self.value == 1
-      update_reputation(self.votable, :vote_up, self.votable.user)
+      UpdateReputationJob.perform_later(self.votable, 'vote_up', self.votable.user_id)
     else
-      update_reputation(self.votable, :vote_down, self.votable.user)
+      UpdateReputationJob.perform_later(self.votable, 'vote_down', self.votable.user_id)
     end
   end
 
   def rollback_reputation
     if self.value == 1
-      update_reputation(self.votable, :vote_down, self.votable.user)
+      UpdateReputationJob.perform_later(self.votable, 'vote_down', self.votable.user_id)
     else
-      update_reputation(self.votable, :vote_up, self.votable.user)
+      UpdateReputationJob.perform_later(self.votable, 'vote_up', self.votable.user_id)
     end
   end
 end

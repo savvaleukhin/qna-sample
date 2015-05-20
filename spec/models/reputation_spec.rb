@@ -12,7 +12,7 @@ describe Reputation do
           let(:answer) { create(:answer, question: question, user: user) }
 
           it 'returns +4 after creating answer' do
-            expect(Reputation.calculate(answer, :create)).to eq 4
+            expect(Reputation.calculate(answer, 'create')).to eq 4
           end
         end
 
@@ -20,7 +20,7 @@ describe Reputation do
           let(:answer) { create(:answer, question: question, user: other) }
 
           it 'returns +2 after creating answer' do
-            expect(Reputation.calculate(answer, :create)).to eq 2
+            expect(Reputation.calculate(answer, 'create')).to eq 2
           end
         end
       end
@@ -32,7 +32,7 @@ describe Reputation do
           let(:answer) { create(:answer, question: question, user: user) }
 
           it 'returns +3 after creating answer' do
-            expect(Reputation.calculate(answer, :create)).to eq 3
+            expect(Reputation.calculate(answer, 'create')).to eq 3
           end
         end
 
@@ -40,7 +40,7 @@ describe Reputation do
           let(:answer) { create(:answer, question: question, user: other) }
 
           it 'returns +1 after creating answer' do
-            expect(Reputation.calculate(answer, :create)).to eq 1
+            expect(Reputation.calculate(answer, 'create')).to eq 1
           end
         end
       end
@@ -52,7 +52,7 @@ describe Reputation do
           let!(:answer) { create(:answer, question: question, user: user) }
 
           it 'returns -4 before destroying answer' do
-            expect(Reputation.calculate(answer, :destroy)).to eq(-4)
+            expect(Reputation.calculate(answer, 'destroy')).to eq(-4)
           end
         end
 
@@ -60,7 +60,7 @@ describe Reputation do
           let!(:answer) { create(:answer, question: question, user: other) }
 
           it 'returns -2 before destroying answer' do
-            expect(Reputation.calculate(answer, :destroy)).to eq(-2)
+            expect(Reputation.calculate(answer, 'destroy')).to eq(-2)
           end
         end
       end
@@ -72,7 +72,7 @@ describe Reputation do
           let!(:answer) { create(:answer, question: question, user: user) }
 
           it 'returns -3 before destroying answer' do
-            expect(Reputation.calculate(answer, :destroy)).to eq(-3)
+            expect(Reputation.calculate(answer, 'destroy')).to eq(-3)
           end
         end
 
@@ -80,7 +80,7 @@ describe Reputation do
           let(:answer) { create(:answer, question: question, user: other) }
 
           it 'returns -1 before destroying answer' do
-            expect(Reputation.calculate(answer, :destroy)).to eq(-1)
+            expect(Reputation.calculate(answer, 'destroy')).to eq(-1)
           end
         end
       end
@@ -90,7 +90,7 @@ describe Reputation do
       let(:answer) { create(:answer, question: question, user: other) }
 
       it 'returns +3' do
-        expect(Reputation.calculate(answer, :accept)).to eq 3
+        expect(Reputation.calculate(answer, 'accept')).to eq 3
       end
     end
 
@@ -99,13 +99,13 @@ describe Reputation do
 
       context 'up' do
         it 'returns +1' do
-          expect(Reputation.calculate(answer, :vote_up)).to eq 1
+          expect(Reputation.calculate(answer, 'vote_up')).to eq 1
         end
       end
 
       context 'down' do
         it 'returns -1' do
-          expect(Reputation.calculate(answer, :vote_down)).to eq(-1)
+          expect(Reputation.calculate(answer, 'vote_down')).to eq(-1)
         end
       end
     end
@@ -118,13 +118,13 @@ describe Reputation do
     context 'Vote' do
       context 'up' do
         it 'returns +2' do
-          expect(Reputation.calculate(question, :vote_up)).to eq 2
+          expect(Reputation.calculate(question, 'vote_up')).to eq 2
         end
       end
 
       context 'down' do
         it 'returns -2' do
-          expect(Reputation.calculate(question, :vote_down)).to eq(-2)
+          expect(Reputation.calculate(question, 'vote_down')).to eq(-2)
         end
       end
     end

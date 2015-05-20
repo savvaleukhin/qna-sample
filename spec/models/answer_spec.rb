@@ -48,55 +48,37 @@ RSpec.describe Answer, type: :model do
     subject { build(:answer_with_user) }
 
     context 'after saving answer' do
-      it 'calculates reputation after creating' do
-        allow(Reputation).to receive(:calculate).and_return(2)
-        expect(Reputation).to receive(:calculate).with(subject, :create)
+      it 'runs Calculate Reputation Job after creating' do
+        expect(UpdateReputationJob).to(
+          receive(:perform_later).with(subject, 'create', subject.user_id))
         subject.save!
       end
 
-      it 'does not calculate reputation after updating' do
+      it 'does not run Calculate Reputation Job after updating' do
         subject.save!
-        expect(Reputation).to_not receive(:calculate)
+        expect(UpdateReputationJob).to_not receive(:perform_later)
         subject.update(body: 'new body')
       end
-=begin
-      it 'saves user reputation' do
-        allow(Reputation).to receive(:calculate).and_return(2)
-        expect { subject.save! }.to change(subject.user, :reputation).by(2)
-      end
-=end
     end
 
     context 'after accepting answer' do
       before { subject.save! }
 
-      it 'calculates reputation' do
-        allow(Reputation).to receive(:calculate).and_return(3)
-        expect(Reputation).to receive(:calculate).with(subject, :accept)
+      it 'runs Calculate Reputation Job' do
+        expect(UpdateReputationJob).to(
+          receive(:perform_later).with(subject, 'accept', subject.user_id))
         subject.accept
       end
-=begin
-      it 'saves user reputation' do
-        allow(Reputation).to receive(:calculate).and_return(3)
-        expect { subject.accept }.to change(subject.user, :reputation).by(3)
-      end
-=end
     end
 
     context 'before destroying answer' do
       before { subject.save! }
 
-      it 'calculates reputation' do
-        allow(Reputation).to receive(:calculate).and_return(-3)
-        expect(Reputation).to receive(:calculate).with(subject, :destroy)
+      it 'runs Calculate Reputation Job' do
+        expect(UpdateReputationJob).to(
+          receive(:perform_later).with(subject, 'destroy', subject.user_id))
         subject.destroy
       end
-=begin
-      it 'saves user reputation' do
-        allow(Reputation).to receive(:calculate).and_return(-3)
-        expect { subject.destroy }.to change(subject.user, :reputation).by(-3)
-      end
-=end
     end
   end
 

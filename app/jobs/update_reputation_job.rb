@@ -1,9 +1,9 @@
-module Reputable
-  extend ActiveSupport::Concern
+class UpdateReputationJob < ActiveJob::Base
+  queue_as :default
 
-  private
+  def perform(object, method, user_id)
+    user = User.find(user_id)
 
-  def update_reputation(object, method, user)
     user.with_lock do
       diff = Reputation.calculate(object, method)
       reputation = user.reputation + diff

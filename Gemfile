@@ -78,6 +78,7 @@ group :test do
   gem 'database_cleaner'
   gem 'poltergeist'
   gem 'json_spec'
+  gem 'test_after_commit'
 end
 
 group :development do

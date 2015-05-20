@@ -22,21 +22,16 @@ RSpec.describe Vote, type: :model do
     subject { build(:vote, value: 1, votable: question, user: user) }
 
     context 'after saving vote' do
-      it 'does not calculate reputation after updating' do
+      it 'does not run Calculate Reputation Job after updating' do
         subject.save!
-        expect(Reputation).to_not receive(:calculate)
+        expect(UpdateReputationJob).to_not receive(:perform_later)
         subject.update(value: -1)
       end
 
-      it 'saves user reputation' do
-        allow(Reputation).to receive(:calculate).and_return(2)
-        expect { subject.save! }.to change(question.user, :reputation).by(2)
-      end
-
       context 'upvote' do
-        it 'calculates reputation after creating' do
-          allow(Reputation).to receive(:calculate).and_return(1)
-          expect(Reputation).to receive(:calculate).with(question, :vote_up)
+        it 'runs Calculate Reputation Job after creating' do
+          expect(UpdateReputationJob).to(
+            receive(:perform_later).with(question, 'vote_up', question.user_id))
           subject.save!
         end
       end
@@ -44,9 +39,9 @@ RSpec.describe Vote, type: :model do
       context 'downvote' do
         subject { build(:vote, value: -1, votable: question, user: user) }
 
-        it 'calculates reputation after creating' do
-          allow(Reputation).to receive(:calculate).and_return(-1)
-          expect(Reputation).to receive(:calculate).with(question, :vote_down)
+        it 'runs Calculate Reputation Job after creating' do
+          expect(UpdateReputationJob).to(
+            receive(:perform_later).with(question, 'vote_down', question.user_id))
           subject.save!
         end
       end
@@ -54,11 +49,12 @@ RSpec.describe Vote, type: :model do
 
     context 'after destroying vote' do
       context 'destroying upvote' do
-        subject { create(:vote, value: -1, votable: question, user: user) }
+        subject { create(:vote, value: 1, votable: question, user: user) }
 
-        it 'calculates reputation' do
-          allow(Reputation).to receive(:calculate).and_return(-1)
-          expect(Reputation).to receive(:calculate).with(question, :vote_down)
+        it 'runs Calculate Reputation Job' do
+          subject
+          expect(UpdateReputationJob).to(
+            receive(:perform_later).with(question, 'vote_down', question.user_id))
           subject.destroy
         end
       end
@@ -66,16 +62,12 @@ RSpec.describe Vote, type: :model do
       context 'destroying downvote' do
         subject { create(:vote, value: -1, votable: question, user: user) }
 
-        it 'calculates reputation' do
-          allow(Reputation).to receive(:calculate).and_return(1)
-          expect(Reputation).to receive(:calculate).with(question, :vote_up)
+        it 'runs Calculate Reputation Job' do
+          subject
+          expect(UpdateReputationJob).to(
+            receive(:perform_later).with(question, 'vote_up', question.user_id))
           subject.destroy
         end
-      end
-
-      it 'saves user reputation' do
-        allow(Reputation).to receive(:calculate).and_return(1)
-        expect { subject.destroy }.to change(question.user, :reputation).by(1)
       end
     end
   end
