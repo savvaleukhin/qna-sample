@@ -14,8 +14,10 @@ RSpec.describe NotifySubscribersJob, type: :job do
 
   it 'sends notification to question subscribers' do
     users.each do |user|
+      message_delivery = instance_double(ActionMailer::MessageDelivery)
       expect(UserMailer).to(
-        receive(:new_answer_notification).with(user.email, answer).and_call_original)
+        receive(:new_answer_notification).with(user.email, answer).and_return(message_delivery))
+      expect(message_delivery).to receive(:deliver_later)
     end
     subject.perform(answer)
   end

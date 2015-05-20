@@ -89,7 +89,11 @@ RSpec.describe User, type: :model do
 
     it 'sends daily digest to all users' do
       question
-      users.each { |user| expect(DailyMailer).to receive(:digest).with(user).and_call_original }
+      users.each do |user|
+        message_delivery = instance_double(ActionMailer::MessageDelivery)
+        expect(DailyMailer).to receive(:digest).with(user).and_return(message_delivery)
+        expect(message_delivery).to receive(:deliver_later)
+      end
       User.send_daily_digest
     end
 

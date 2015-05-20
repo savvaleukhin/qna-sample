@@ -3,7 +3,7 @@ class NotifySubscribersJob < ActiveJob::Base
 
   def perform(answer)
     answer.question.subscribers.each do |user|
-      UserMailer.delay.new_answer_notification(user.email, answer)
+      UserMailer.new_answer_notification(user.email, answer).deliver_later
     end
   end
 end

@@ -9,11 +9,10 @@ class Answer < ActiveRecord::Base
   validates :user_id, :body, presence: true
   accepts_nested_attributes_for :attachments, reject_if: -> (a) { a[:file].blank? }, allow_destroy: true
 
-  after_create :notify_question_owner
-  after_create :notify_question_subscribers
-  before_destroy :rollback_reputation
-
   after_commit :calculate_reputation, on: :create
+  after_commit :notify_question_owner, on: :create
+  after_commit :notify_question_subscribers, on: :create
+  before_destroy :rollback_reputation
 
   scope :by_top, -> { order('accepted DESC') }
 
@@ -37,7 +36,7 @@ class Answer < ActiveRecord::Base
   end
 
   def notify_question_owner
-    UserMailer.delay.new_answer_notification(self.question.user.email, self)
+    UserMailer.new_answer_notification(self.question.user.email, self).deliver_later
   end
 
   def notify_question_subscribers

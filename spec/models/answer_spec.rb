@@ -86,9 +86,11 @@ RSpec.describe Answer, type: :model do
     subject { build(:answer_with_user) }
 
     it 'sends notification to question owner' do
+      message_delivery = instance_double(ActionMailer::MessageDelivery)
       expect(UserMailer).to(
         receive(:new_answer_notification).with(
-          subject.question.user.email, subject).and_call_original)
+          subject.question.user.email, subject).and_return(message_delivery))
+      expect(message_delivery).to receive(:deliver_later)
       subject.save!
     end
   end
