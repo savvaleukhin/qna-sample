@@ -1,7 +1,7 @@
 class Question < ActiveRecord::Base
   include Votable
 
-  scope :published_last_day, -> { where(created_at: (Time.now.utc - 1.day)..Time.now.utc) }
+  scope :published_last_day, -> { where(created_at: (Time.now.utc - 1.day).all_day) }
 
   belongs_to :user
   has_many :answers, dependent: :destroy

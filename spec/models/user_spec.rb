@@ -88,12 +88,15 @@ RSpec.describe User, type: :model do
     let(:question) { create(:question, user: users.first) }
 
     it 'sends daily digest to all users' do
-      question
+      last_day = Time.now.utc - 1.day
+      question.update(created_at: last_day)
+
       users.each do |user|
         message_delivery = instance_double(ActionMailer::MessageDelivery)
         expect(DailyMailer).to receive(:digest).with(user).and_return(message_delivery)
         expect(message_delivery).to receive(:deliver_later)
       end
+
       User.send_daily_digest
     end
 
