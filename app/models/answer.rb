@@ -12,6 +12,7 @@ class Answer < ActiveRecord::Base
 
   after_create :calculate_reputation
   after_create :notify_question_owner
+  after_create :notify_question_subscribers
   before_destroy :rollback_reputation
 
   scope :by_top, -> { order('accepted DESC') }
@@ -36,6 +37,10 @@ class Answer < ActiveRecord::Base
   end
 
   def notify_question_owner
-    UserMailer.delay.notify_question_owner(self)
+    UserMailer.delay.new_answer_notification(self.question.user.email, self)
+  end
+
+  def notify_question_subscribers
+    NotifySubscribersJob.perform_later(self)
   end
 end

@@ -29,11 +29,11 @@ describe Ability do
     let(:own_attachment) { create(:attachment, attachmentable: own_question) }
     let(:other_attachment) { create(:attachment, attachmentable: other_question) }
     let(:own_subscription) do
-        create(:subscription, subscriber: user, tracking_question: other_question)
+      create(:subscription, subscriber: user, tracking_question: other_question)
     end
 
     let(:other_subscription) do
-        create(:subscription, subscriber: other, tracking_question: own_question)
+      create(:subscription, subscriber: other, tracking_question: own_question)
     end
 
     it { should be_able_to :read, Question }

@@ -5,10 +5,8 @@
   #
   #   en.user_mailer.notify_question_owner.subject
   #
-  def notify_question_owner(answer)
+  def new_answer_notification(email, answer)
     @answer = answer
-    recipient = @answer.question.user.email
-
-    mail(to: recipient, subject: 'New answer for your question')
+    mail(to: email, subject: 'New answer')
   end
 end

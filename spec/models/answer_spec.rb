@@ -104,7 +104,18 @@ RSpec.describe Answer, type: :model do
     subject { build(:answer_with_user) }
 
     it 'sends notification to question owner' do
-      expect(UserMailer).to receive(:notify_question_owner).with(subject).and_call_original
+      expect(UserMailer).to(
+        receive(:new_answer_notification).with(
+          subject.question.user.email, subject).and_call_original)
+      subject.save!
+    end
+  end
+
+  describe '#notify_question_subscribers' do
+    subject { build(:answer_with_user) }
+
+    it 'sends notifications to question subscribers' do
+      expect(NotifySubscribersJob).to receive(:perform_later)
       subject.save!
     end
   end
