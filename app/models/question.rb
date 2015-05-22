@@ -3,6 +3,8 @@ class Question < ActiveRecord::Base
 
   scope :published_last_day, -> { where(created_at: (Time.now.utc - 1.day).all_day) }
 
+  SEARCH_OPTIONS = %i(everywhere questions answers comments users)
+
   belongs_to :user
   has_many :answers, dependent: :destroy
   has_many :attachments, as: :attachmentable, dependent: :destroy
@@ -21,5 +23,23 @@ class Question < ActiveRecord::Base
 
   def subscribed_by?(user_id)
     subscriptions.where(subscriber_id: user_id).any?
+  end
+
+  private
+
+  def self.search_filter(params)
+    query = Riddle::Query.escape(params[:query])
+    condition = params[:condition].to_sym
+
+    if SEARCH_OPTIONS.include? condition
+      case condition
+      when SEARCH_OPTIONS[0]
+        Question.search query
+      when SEARCH_OPTIONS[1]
+        Question.search conditions: { title: query, bod: query }
+      else
+        Question.search conditions: { condition => query }
+      end
+    end
   end
 end
