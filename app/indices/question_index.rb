@@ -1,7 +1,6 @@
 ThinkingSphinx::Index.define :question, with: :active_record do
   # fields
-  indexes title, sortable: true
-  indexes body
+  indexes [title, body], as: :questions
   indexes user.email, as: :users, sortable: true
   indexes answers.body, as: :answers
   indexes comments.body, as: :comments

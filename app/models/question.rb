@@ -31,15 +31,13 @@ class Question < ActiveRecord::Base
     query = Riddle::Query.escape(params[:query])
     condition = params[:condition].to_sym
 
-    if SEARCH_OPTIONS.include? condition
-      case condition
-      when SEARCH_OPTIONS[0]
-        Question.search query
-      when SEARCH_OPTIONS[1]
-        Question.search conditions: { title: query, bod: query }
-      else
-        Question.search conditions: { condition => query }
-      end
+    return [] unless SEARCH_OPTIONS.include? condition
+
+    case condition
+    when SEARCH_OPTIONS[0]
+      Question.search query
+    else
+      Question.search conditions: { condition => query }
     end
   end
 end
