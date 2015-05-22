@@ -25,19 +25,12 @@ class Question < ActiveRecord::Base
     subscriptions.where(subscriber_id: user_id).any?
   end
 
-  private
-
-  def self.search_filter(params)
-    query = Riddle::Query.escape(params[:query])
-    condition = params[:condition].to_sym
+  def self.search_filter(query, options = {})
+    condition = options[:condition].to_sym
 
     return [] unless SEARCH_OPTIONS.include? condition
+    return Question.search Riddle::Query.escape(query) if condition == SEARCH_OPTIONS[0]
 
-    case condition
-    when SEARCH_OPTIONS[0]
-      Question.search query
-    else
-      Question.search conditions: { condition => query }
-    end
+    Question.search conditions: { condition => Riddle::Query.escape(query) }
   end
 end

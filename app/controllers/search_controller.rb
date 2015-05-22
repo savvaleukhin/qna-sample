@@ -3,7 +3,7 @@ class SearchController < ApplicationController
 
   def search
     if params[:query].present?
-      @questions = Question.search_filter(params)
+      @questions = Question.search_filter(params[:query], condition: params[:condition])
     else
       @questions = []
     end
