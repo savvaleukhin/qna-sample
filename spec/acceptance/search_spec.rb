@@ -6,19 +6,23 @@ feature 'Search', %q(
 ) do
   given(:user) { create(:user) }
   given!(:questions) { create_list(:question_list, 2, user: user, body: 'Question') }
-  given!(:question) { create(:question, user: user, title: 'Full Question', body: 'the body') }
-  given!(:answer) { create(:answer, question: question, user: user, body: 'best answer') }
-  given!(:comment) { create(:comment, commentable: question, user: user, body: 'first comment') }
+  given!(:question) { create(:question, user: user, title: 'Latest Question', body: 'the body') }
+  given!(:answer) { create(:answer, question: question, user: user, body: 'latest answer') }
+  given!(:comment) { create(:comment, commentable: question, user: user, body: 'latest comment') }
 
-  scenario 'User searches a question globally', js: true do
+  scenario 'User searches globally', js: true do
     ThinkingSphinx::Test.run do
       visit root_path
 
-      fill_in 'query', with: 'Question'
+      fill_in 'query', with: 'latest'
+      select('everywhere', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
-      expect(page).to have_content 'Question'
+
+      expect(page).to have_content 'latest answer'
+      expect(page).to have_content 'latest comment'
+      expect(page).to have_content 'Latest Question'
       within '.results' do
         expect(page).to have_selector('div', count: 3)
       end
@@ -34,7 +38,7 @@ feature 'Search', %q(
       click_on 'Search'
 
       expect(current_path).to eq search_path
-      expect(page).to have_content 'Full Question'
+      expect(page).to have_content 'Latest Question'
       within '.results' do
         expect(page).to have_selector('div', count: 1)
       end
@@ -45,12 +49,12 @@ feature 'Search', %q(
     ThinkingSphinx::Test.run do
       visit root_path
 
-      fill_in 'query', with: 'best answer'
+      fill_in 'query', with: 'latest answer'
       select('answers', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
-      expect(page).to have_content 'Full Question'
+      expect(page).to have_content 'latest answer'
       within '.results' do
         expect(page).to have_selector('div', count: 1)
       end
@@ -61,12 +65,12 @@ feature 'Search', %q(
     ThinkingSphinx::Test.run do
       visit root_path
 
-      fill_in 'query', with: 'first comment'
+      fill_in 'query', with: 'latest comment'
       select('comments', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
-      expect(page).to have_content 'Full Question'
+      expect(page).to have_content 'latest comment'
       within '.results' do
         expect(page).to have_selector('div', count: 1)
       end
@@ -82,10 +86,9 @@ feature 'Search', %q(
       click_on 'Search'
 
       expect(current_path).to eq search_path
-      expect(page).to have_content 'Full Question'
-      expect(page).to have_content 'Question #'
+      expect(page).to have_content question.user.email
       within '.results' do
-        expect(page).to have_selector('div', count: 3)
+        expect(page).to have_selector('div', count: 1)
       end
     end
   end

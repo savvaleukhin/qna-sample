@@ -1,6 +1,5 @@
-ThinkingSphinx::Index.define :question, with: :active_record do
+ThinkingSphinx::Index.define :answer, with: :active_record do
   # fields
-  indexes title
   indexes body
 
   # attributes
