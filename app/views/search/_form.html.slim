@@ -3,6 +3,8 @@
     = text_field_tag :query, params[:query], class: 'form-control'
 
   .form-group
-    = select_tag(:condition, options_for_select(Search::SEARCH_OPTIONS, params[:condition]), class: 'form-control')
+    = select_tag(:condition,
+        options_for_select(Search::SEARCH_OPTIONS,
+        params[:condition]), prompt: 'Everywhere', class: 'form-control')
 
   = submit_tag 'Search', name: nil, class: 'btn btn-default'

@@ -15,7 +15,7 @@ feature 'Search', %q(
       visit root_path
 
       fill_in 'query', with: 'latest'
-      select('everywhere', from: 'condition')
+      select('Everywhere', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
@@ -34,7 +34,7 @@ feature 'Search', %q(
       visit root_path
 
       fill_in 'query', with: 'the body'
-      select('questions', from: 'condition')
+      select('Questions', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
@@ -50,7 +50,7 @@ feature 'Search', %q(
       visit root_path
 
       fill_in 'query', with: 'latest answer'
-      select('answers', from: 'condition')
+      select('Answers', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
@@ -66,7 +66,7 @@ feature 'Search', %q(
       visit root_path
 
       fill_in 'query', with: 'latest comment'
-      select('comments', from: 'condition')
+      select('Comments', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
@@ -82,7 +82,7 @@ feature 'Search', %q(
       visit root_path
 
       fill_in 'query', with: question.user.email
-      select('users', from: 'condition')
+      select('Users', from: 'condition')
       click_on 'Search'
 
       expect(current_path).to eq search_path
