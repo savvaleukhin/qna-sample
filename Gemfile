@@ -40,8 +40,8 @@ gem 'remotipart'
 gem "nested_form"
 gem 'handlebars_assets'
 gem "private_pub"
-# gem "thin"
-gem 'puma'
+gem "thin"
+# gem 'puma'
 gem 'responders', '~> 2.0'
 gem 'bootstrap-sass', '~> 3.3.4'
 gem 'autoprefixer-rails'
