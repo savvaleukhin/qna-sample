@@ -58,6 +58,15 @@ gem 'sinatra', :require => nil
 gem 'whenever', :require => false
 gem 'mysql2', '~> 0.3.13', :platform => :ruby
 gem 'thinking-sphinx', '~> 3.1.3'
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
+
+group :development do
+  gem 'capistrano',  require: false
+  gem 'capistrano-bundler',  require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm',  require: false
+end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
