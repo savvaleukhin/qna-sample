@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
     :omniauthable, omniauth_providers: [:facebook, :twitter]
   )
 
+  after_save ThinkingSphinx::RealTime.callback_for(:user)
+
   def self.find_for_oauth(auth)
     authorization = Authorization.find_by(provider: auth.provider, uid: auth.uid.to_s)
     return authorization.user if authorization

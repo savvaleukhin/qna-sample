@@ -9,10 +9,11 @@ class Answer < ActiveRecord::Base
   validates :user_id, :body, presence: true
   accepts_nested_attributes_for :attachments, reject_if: -> (a) { a[:file].blank? }, allow_destroy: true
 
+  before_destroy :rollback_reputation
   after_commit :calculate_reputation, on: :create
   after_commit :notify_question_owner, on: :create
   after_commit :notify_question_subscribers, on: :create
-  before_destroy :rollback_reputation
+  after_save ThinkingSphinx::RealTime.callback_for(:answer)
 
   scope :by_top, -> { order('accepted DESC') }
 

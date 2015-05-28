@@ -15,6 +15,8 @@ class Question < ActiveRecord::Base
 
   accepts_nested_attributes_for :attachments, reject_if: -> (a) { a[:file].blank? }, allow_destroy: true
 
+  after_save ThinkingSphinx::RealTime.callback_for(:question)
+
   def subscription_for(user_id)
     subscriptions.find_by(subscriber_id: user_id)
   end

@@ -1,8 +1,10 @@
-ThinkingSphinx::Index.define :question, with: :active_record do
+ThinkingSphinx::Index.define :question, with: :real_time do
   # fields
   indexes title
   indexes body
 
   # attributes
-  has user_id, created_at, updated_at
+  has user_id, type: :integer
+  has created_at, type: :timestamp
+  has updated_at, type: :timestamp
 end
