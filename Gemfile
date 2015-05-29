@@ -60,6 +60,7 @@ gem 'mysql2', '~> 0.3.13', :platform => :ruby
 gem 'thinking-sphinx', '~> 3.1.3'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
+gem 'unicorn'
 
 group :development do
   gem 'capistrano',  require: false
@@ -67,6 +68,7 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm',  require: false
   gem 'capistrano-sidekiq',  require: false
+  gem 'capistrano3-unicorn',  require: false
 end
 
 group :development, :test do
