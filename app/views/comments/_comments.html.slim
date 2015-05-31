@@ -1,7 +1,8 @@
 div id='comments-#{commentable.class.name.downcase}-#{commentable.id}' class='comments'
   - commentable.comments.each do |comment|
     div id='comment-#{comment.id}'
-      p[class='comment_body'] = comment.body
+      - cache comment do
+        p[class='comment_body'] = comment.body
 
       p
         -if can?(:update, comment)
