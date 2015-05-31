@@ -1,4 +1,4 @@
-- cache @question do
+- cache_unless(user_signed_in?, @question) do
   .question
     = render partial: 'question', object:  @question, as: 'question'
 
@@ -8,7 +8,7 @@
       = render 'answers'
 
   - if can?(:create, Answer)
-    = nested_form_for [@question, @answer], remote: true, data: { type: :json, private: :true } do |f|
+    = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
       .row
         .col-md-6
           .form-group

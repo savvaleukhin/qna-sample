@@ -1,7 +1,7 @@
 - @answers.by_top.each do |answer|
   - if answer.persisted?
 
-    - cache answer do
+    - cache_unless(user_signed_in?, answer) do
       div id="answer-#{answer.id}" class=(answer.accepted == true ? "accepted-answer answer" : "answer")
         p class="answer_body"
           = answer.body

@@ -1,9 +1,8 @@
 p= link_to 'add comment', '', class: 'add-comment-link',
-    data: { commentable_id: commentable.id, commentable_name: commentable.class.name.downcase, private: :true }
+    data: { commentable_id: commentable.id, commentable_name: commentable.class.name.downcase }
 
 = form_for [commentable, Comment.new],
     html: { id: "add-comment-#{commentable.class.name.downcase}-#{commentable.id}" },
-    data: { private: :true },
     remote: true, data: { type: :json } do |f|
   .row
     .col-md-6

@@ -4,7 +4,7 @@ div id='comments-#{commentable.class.name.downcase}-#{commentable.id}' class='co
       - cache comment do
         p[class='comment_body'] = comment.body
 
-      p data-visible-for="#{comment.user_id}"
+      p
         -if can?(:update, comment)
           = link_to 'Edit', '', class: 'edit-comment-link btn btn-link',
             data: { comment_id: comment.id }
@@ -15,7 +15,7 @@ div id='comments-#{commentable.class.name.downcase}-#{commentable.id}' class='co
       -if can?(:create, comment)
         = form_for [commentable, comment],
             html: { id: "edit-comment-#{comment.id}" },
-            remote: true, data: { type: :json, visible_for: comment.user_id } do |f|
+            remote: true, data: { type: :json } do |f|
           .row
             .col-md-6
               .form-group
