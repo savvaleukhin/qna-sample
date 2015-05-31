@@ -1,7 +1,7 @@
 class Answer < ActiveRecord::Base
   include Votable
 
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
   has_many :attachments, as: :attachmentable, dependent: :destroy
   has_many :comments, as: :commentable, dependent: :destroy
@@ -19,7 +19,8 @@ class Answer < ActiveRecord::Base
 
   def accept
     Answer.transaction do
-      Answer.where(question_id: question_id, accepted: true).update_all(accepted: false)
+      Answer.where(
+        question_id: question_id, accepted: true).update_all(accepted: false, updated_at: Time.now)
       update(accepted: true)
     end
 
