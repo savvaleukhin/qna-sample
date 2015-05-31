@@ -1,29 +1,30 @@
-.question
-  = render partial: 'question', object:  @question, as: 'question'
+- cache @question do
+  .question
+    = render partial: 'question', object:  @question, as: 'question'
 
-.answers data={question_id: "#{@question.id}"}
-  - if @answers.any?
+  .answers data={question_id: "#{@question.id}"}
     h3 Answers
-    = render 'answers'
+    - if @answers.any?
+      = render 'answers'
 
-- if can?(:create, Answer)
-  = nested_form_for [@question, @answer], remote: true, data: { type: :json } do |f|
-    .row
-      .col-md-6
-        .form-group
-          = f.label :body, 'Your answer'
-          .answer-errors
-          = f.text_area :body, class: "form-control", rows: 5
+  - if can?(:create, Answer)
+    = nested_form_for [@question, @answer], remote: true, data: { type: :json, private: :true } do |f|
+      .row
+        .col-md-6
+          .form-group
+            = f.label :body, 'Your answer'
+            .answer-errors
+            = f.text_area :body, class: "form-control", rows: 5
 
-        .form-group
-          div id="attachment"
-            = f.fields_for :attachments do |a|
-              = a.label :file
-              = a.file_field :file
-              = a.link_to_remove 'Remove'
-            = f.link_to_add 'New attachment', :attachments
+          .form-group
+            div id="attachment"
+              = f.fields_for :attachments do |a|
+                = a.label :file
+                = a.file_field :file
+                = a.link_to_remove 'Remove'
+              = f.link_to_add 'New attachment', :attachments
 
-        = f.submit 'Create', class: "btn btn-default"
+          = f.submit 'Create', class: "btn btn-default"
 
 = subscribe_to "/questions/#{@question.id}/answers"
 = subscribe_to "/questions/#{@question.id}/comments"

@@ -1,7 +1,7 @@
 div id='question_title': h2= question.title
 
 - if can?(:create, Subscription)
-  div id='subscription_form'
+  div id='subscription_form' data-private='true'
     - if question.subscribed_by?(current_user.id)
       = render partial: 'unsubscribe', object: question, as: 'question'
     - else
@@ -11,14 +11,15 @@ div id='question_title': h2= question.title
   h4= question.total_votes
 
 - if can?(:vote, question)
-  - if question.voted_by?(current_user)
-    p your vote:
-    p= question.vote_by(current_user)
-    - if can?(:unvote, question)
-      p= link_to "unvote", unvote_question_path(question), remote: true, method: "post"
-  - else
-    p= link_to "up", vote_question_path(question, value: 1), remote: true, method: "post"
-    p= link_to "down", vote_question_path(question, value: -1), remote: true, method: "post"
+  .vote data-private='true'
+    - if question.voted_by?(current_user)
+      p your vote:
+      p= question.vote_by(current_user)
+      - if can?(:unvote, question)
+        p= link_to "unvote", unvote_question_path(question), remote: true, method: "post"
+    - else
+      p= link_to "up", vote_question_path(question, value: 1), remote: true, method: "post"
+      p= link_to "down", vote_question_path(question, value: -1), remote: true, method: "post"
 
 div id='question_body': p= question.body
 
@@ -29,9 +30,10 @@ div id='question_body': p= question.body
         tr id="attachment-#{attachment.id}"
           td= link_to attachment.file.filename, attachment.file.url
           - if can?(:destroy, attachment)
-            td= link_to 'remove', attachment, remote: true, method: :delete
+            td data-visible-for="#{question.user_id}"
+              = link_to 'remove', attachment, remote: true, method: :delete
 
-p
+p data-visible-for="#{question.user_id}"
   - if can?(:update, question)
     = link_to 'Edit', '', class: 'edit-question-link btn btn-link'
   - if can?(:destroy, question)
@@ -39,9 +41,10 @@ p
         data: { confirm: 'Are you sure?' }, class: 'btn btn-link'
 
 - if can?(:update, question)
-  .question-errors
+  .question-errors data-visible-for="#{question.user_id}"
 
-  = form_for question, remote: true, html: { id: 'edit-question' } do |f|
+  = form_for question,
+      remote: true, html: { id: 'edit-question' }, data: { visible_for: question.user_id } do |f|
     .row
       .col-xs-6
         .form-group
