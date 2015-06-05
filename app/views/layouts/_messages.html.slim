@@ -1,5 +1,5 @@
 - flash.each do |name, msg|
-  = content_tag :div, msg, class: "alert alert-#{name == 'notice' ? 'success' : name }"
+  = content_tag :div, msg, class: "alert alert-#{name}"
 
 .notice-default
   - notice if notice
