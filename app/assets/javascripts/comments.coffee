@@ -9,9 +9,9 @@ newCommentSuccess = (e) ->
 
 newCommentError = (e, xhr, status, error) ->
   errors = $.parseJSON(xhr.responseText).errors
-  $('.alert').html('')
+  $('.alert-default').html('')
   $.each errors, (index, value) ->
-    $('.alert').append("#{index} #{value}")
+    $('.alert-default').append("#{index} #{value}").show()
 
 addCommentFunction = (e) ->
   e.preventDefault();
@@ -26,9 +26,9 @@ editCommentSuccess = (e, data, status, xhr) ->
 
 editCommentError = (e, xhr, status, error) ->
   errors = $.parseJSON(xhr.responseText).errors
-  $('.alert').html('')
+  $('.alert-default').html('')
   $.each errors, (index, value) ->
-    $('.alert').append("#{index} #{value}")
+    $('.alert-default').append("#{index} #{value}").show()
 
 editCommentFunction = (e) ->
   e.preventDefault()
