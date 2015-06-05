@@ -1,14 +1,31 @@
-= nested_form_for @question do |f|
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
+.row
+  .col-md-6
+    - if @question.errors.any?
+      ul class="list-unstyled"
+        - @question.errors.full_messages.each do |m|
+          li
+            .alert.alert-danger.alert-dismissible
+              button class="close" data-dismiss="alert" aria-label="Close"
+                span aria-hidden="true" &times;
+              = m
 
-  div id="attachment"
-    = f.fields_for :attachments do |a|
-      = a.label :file
-      = a.file_field :file
-      = a.link_to_remove 'Remove'
-    = f.link_to_add 'New attachment', :attachments
+    = nested_form_for @question do |f|
+      .form-group
+        = f.label :title
+        = f.text_field :title, class: 'form-control'
+      .form-group
+        = f.label :body
+        = f.text_area :body, class: 'form-control'
 
-  = f.submit 'Save'
+      div id="attachment"
+        = f.fields_for :attachments do |a|
+          .form-group
+            = a.label :file
+            = a.file_field :file
+            = a.link_to_remove 'Remove'
+        .form-group
+          = f.link_to_add 'New attachment', :attachments
+
+      .btn-group
+        = f.submit 'Save', class: 'btn btn-success'
+        = link_to 'Cancel', :back, class: 'btn btn-default'
