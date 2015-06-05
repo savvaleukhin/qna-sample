@@ -1,6 +1,9 @@
-nav= link_to 'Ask question', new_question_path, class: 'btn btn-success btn-sm'
-h1 All Questions
-.questions
-  = render 'questions'
+= render "nav"
+
+main
+  header class="subheader"
+    h1 All Questions
+  .questions
+    = render 'questions'
 
 = subscribe_to "/questions"
